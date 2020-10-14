@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "픽툰-당신의 웹툰취향은?",
+    "slug": "picktoon_expo",
+    "scheme": "picktoon",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "notification": {
+      "iosDisplayInForeground": true
+    },
+    "ios": {
+      "bundleIdentifier": "com.cock.picktoon",
+      "buildNumber": "11",
+      "requireFullScreen": true,
+      "supportsTablet": true,
+      "icon": "./assets/icon.png",
+      "usesAppleSignIn": true
+    },
+    "android": {
+      "package": "com.cock.picktoon",
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json"
+    }
+  }
+}

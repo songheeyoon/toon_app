@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "344103583201",
+    "firebase_url": "https://picktoon-5cff7.firebaseio.com",
+    "project_id": "picktoon-5cff7",
+    "storage_bucket": "picktoon-5cff7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344103583201:android:02cdceb1ea3dcb9fc0e6a0",
+        "android_client_info": {
+          "package_name": "com.cock.picktoon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344103583201-vj9s4paq8b06nhmdcl4cddg52q0qi4cc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cock.picktoon",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "344103583201-5g229ai4btbot222n47mvm4pq5kn88s2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cock.picktoon",
+            "certificate_hash": "54f89c0d819bd585fb0084b4b7eb927653b9f649"
+          }
+        },
+        {
+          "client_id": "344103583201-a866egoo5o26gmvae1nb112om5bfa9r6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cock.picktoon",
+            "certificate_hash": "4af9198a11d2c2510313bd914f08b10afa8eb4e5"
+          }
+        },
+        {
+          "client_id": "344103583201-6bn0dilbk1sih2vrg6cj9aigfd0maq10.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPfd6Nv6LFyS1J70VhERWDRaHRBVQRF4c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344103583201-v6cro6gcn5e49do10mivvku6qfinaj9k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
