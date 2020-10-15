@@ -116,6 +116,7 @@ export default function BannerList({ imgList, navigation }) {
                 onScroll={(e) => {
                     onScrollBanner(e)
                 }}
+                scrollEventThrottle={16}
                 onMomentumScrollEnd={(e) => {
                     isHandScroll = false;
                     stepper = parseInt(inidcatorIndex);
@@ -188,8 +189,7 @@ const styles = StyleSheet.create({
         width: Constants.WINDOW_WIDTH-20,
         height: Constants.WINDOW_WIDTH*0.8,
         borderRadius:10,
-        // width:'100%'
-        resizeMode:'contain'
+        resizeMode:"cover"
     },
     pagenation: {
         flexDirection: 'row',

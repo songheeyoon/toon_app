@@ -288,7 +288,7 @@ export default function DetailView({ route, navigation }) {
                 }}
             />
             <KeyboardAvoidingView
-                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                // behavior={Platform.OS == "ios" ? "padding" : "height"}
                 style={{ flex: 1, marginBottom: Platform.OS == 'ios' ? isOpen ? 0 : 40 : 0 }}
                 enabled>
                 <View style={{
@@ -345,112 +345,6 @@ export default function DetailView({ route, navigation }) {
                 </View>
             </KeyboardAvoidingView>
             <BottomBar navigation={navigation} selTab={route.params.selTabIndex} />
-            {/* {
-                Platform.OS == 'ios' ?
-                    <>
-                        <View style={Platform.OS == "ios" ? styles.bottomToolBarHidden : styles.bottomToolBarHiddenAndroid}>
-                            <TouchableOpacity
-                                style={styles.directionIcon}
-                                onPress={() => {
-                                    toggleMainView()
-                                }}
-                            >
-                                <AntDesign name="up" size={25} color={Constants.mainColor} />
-                            </TouchableOpacity>
-                        </View>
-
-                        <Animated.View
-                            style={{
-                                marginBottom: bottomOfMainContainer,
-                                width: Constants.WINDOW_WIDTH,
-                            }}
-                        >
-                            <FooterModal
-                                navigation={navigation}
-                                selTabIndex={route.params.selTabIndex}
-                                webtoon_link={route.params.webtoon.webtoon_link}
-                                pickStatus={pickStatus}
-                                refuseStatus={refuseStatus}
-                                shownStatus={shownStatus}
-                                pickWebtoon={() => {
-                                    PickWebtoon()
-                                }}
-                                refuseWebtoon={() => {
-                                    RefuseWebtoon()
-                                }}
-                                shownWebtoon={() => {
-                                    ShownWebtoon()
-                                }}
-                                onPressTopBar={() => {
-                                    toggleMainView()
-                                }}
-                                delPickWebtoon={() => {
-                                    DelPick()
-                                }}
-                                delRefuseWebtoon={() => {
-                                    DelRefuse()
-                                }}
-                                delShownWebtoon={() => {
-                                    DelShown()
-                                }}
-                            />
-                        </Animated.View>
-                        <BottomBar navigation={navigation} selTab={route.params.selTabIndex} />
-                    </> :
-                    isOpen ?
-                        null :
-                        <>
-                            <View style={Platform.OS == "ios" ? styles.bottomToolBarHidden : styles.bottomToolBarHiddenAndroid}>
-                                <TouchableOpacity
-                                    style={styles.directionIcon}
-                                    onPress={() => {
-                                        toggleMainView()
-                                    }}
-                                >
-                                    <AntDesign name="up" size={25} color={Constants.mainColor} />
-                                </TouchableOpacity>
-                            </View>
-
-                            <Animated.View
-                                style={{
-                                    marginBottom: bottomOfMainContainer,
-                                    width: Constants.WINDOW_WIDTH,
-                                }}
-                            >
-                                <FooterModal
-                                    navigation={navigation}
-                                    selTabIndex={route.params.selTabIndex}
-                                    webtoon_link={route.params.webtoon.webtoon_link}
-                                    pickStatus={pickStatus}
-                                    refuseStatus={refuseStatus}
-                                    shownStatus={shownStatus}
-                                    pickWebtoon={() => {
-                                        PickWebtoon()
-                                    }}
-                                    refuseWebtoon={() => {
-                                        RefuseWebtoon()
-                                    }}
-                                    shownWebtoon={() => {
-                                        ShownWebtoon()
-                                    }}
-                                    onPressTopBar={() => {
-                                        toggleMainView()
-                                    }}
-                                    delPickWebtoon={() => {
-                                        DelPick()
-                                    }}
-                                    delRefuseWebtoon={() => {
-                                        DelRefuse()
-                                    }}
-                                    delShownWebtoon={() => {
-                                        DelShown()
-                                    }}
-                                />
-                            </Animated.View>
-                            <BottomBar navigation={navigation} selTab={route.params.selTabIndex} />
-                        </>
-            } */}
-
         </View>
     )
 }

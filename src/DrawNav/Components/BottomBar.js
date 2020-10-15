@@ -6,7 +6,7 @@ import Constants, {getCurUserIx} from '../../Utils/Constant';
 
 // 보텀 바
 export default function BottomBar(props) {
-    console.log(props.name);
+   
     return (
         <View style={[styles.bottomView,{opacity:props.name == "none" ? 0 : 1}]}>
             <TouchableOpacity

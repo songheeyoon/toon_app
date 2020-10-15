@@ -273,6 +273,7 @@ const RestAPI = {
         data.append('webtoon_ix', webtoonIx)
         data.append('mode', 'review')
         data.append('review', content)
+        // data.append('rate',rate)
 
         return new Promise((resolve, reject) => {
             formDataCall('api_webtoon_ok', 'post', data, null, (res, err) => {

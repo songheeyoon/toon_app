@@ -124,7 +124,8 @@ export default function HomeView({ navigation, route }) {
             console.log(err, data)
         }).then(data => {
             global.curUser = JSON.parse(data)
-            console.log('Cur user data at Splash : ', global.curUser)
+            console.log('Cur user data at Splash : ', global.curUser);
+            // console.log("'"+global.curUser.name+"'"+"님을 위한 웹툰");
             navigation.navigate('draw');
         }).catch(err => {
             console.log('Err while get async data', err)
@@ -158,8 +159,7 @@ export default function HomeView({ navigation, route }) {
                 RestAPI.getHomeWebtoons(getCurUserIx()).then(res => {
                     if (res.success == 1) {
                         getHomeData(res)
-                        // console.log(res);
-                        // console.log(homeData,"메인화면 데이터API");
+                
                     } else {
                         Alert.alert('로딩 오류', '잠시 후 다시 시도하십시오.', [{ text: '확인' }])
                         showPageLoader(false)
@@ -201,14 +201,16 @@ export default function HomeView({ navigation, route }) {
                     <BannerList imgList={homeData ? homeData.banner : null} navigation={navigation} />
                     {
                         homeData ? homeData.data.map((item, index) => (
-                    
-                            item.cate_name == "이번주 신작" || item.cate_name == "가슴뛰는 스포츠 레전드" || item.cate_name == "입꼬리 주의 개그 레전드"?
+                            index == 0 || index == 1 || index == item.cate_name.length -1 || item.cate_name == "이번주 신작" ?
+                            // item.cate_name == "이번주 신작" || item.cate_name == "가슴뛰는 스포츠 레전드" ||item.cate_name == "입꼬리 주의 개그 레전드"?
                                     <View key={index} style={global.deviceType == '1' ? styles.slideBodyWhite : styles.slideBodyWhiteTablet}>
                                     <Text style={global.deviceType == '1' ? styles.slideBodyWhiteInverseTitle : styles.slideBodyWhiteInverseTitleTablet}>{item.cate_name}</Text>
                                     <SliderOneRow
                                         textColor={item.cate_name} 
                                         images={item.webtoon_list}
                                         navigation={navigation}
+                                        index={index}
+                                        last={item.cate_name.length-1}
                                         />
                                     </View>
                              :

@@ -11,9 +11,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 
-import Constants from '../../Utils/Constant';
+import Constants, { getCurUserIx } from '../../Utils/Constant';
 import RestAPI from '../../Utils/RestAPI';
 import WebtoonDetailComment from './WebtoonDetailComment';
+import { TouchableItem } from 'react-native-tab-view';
 
 
 // 해당 웹툰 프로필 내용 현시
@@ -44,20 +45,22 @@ export default function WebtoonDetailPage(
     const [starCount, setStarCount] = useState(Number(webtoon.rate))
     const [content, setContent] = useState('')
     const [addView, setAddView] = useState(false)
-
+    const [nickcoment,setNickComent] = useState([]); 
+    const [commentstar,setCommentStar] = useState();
+    let input = useRef();
     useEffect(() => {
         flatRef.current.scrollToPosition(0)
         setWebtoon(webtoonDetail)
         setAddView(false)
         setContent('')
         setStarCount(Number(webtoonDetail.rate))
+        setNickComent(webtoon.reviews.details);
     }, [webtoonDetail])
 
     useFocusEffect(React.useCallback(()=>{
         flatRef.current.scrollToPosition(0)
     }, []))
-
-
+    //  console.log(global.curUser);
     // 선택된 프로필의 상세정보 가져오기
     const LoadWebtoonDetail = (webtoonIx) => {
         RestAPI.getWebtoonDetail(curUserIx, webtoonIx).then(res => {
@@ -79,7 +82,7 @@ export default function WebtoonDetailPage(
             return
         }
         showPageLoader(true)
-        RestAPI.postReview(curUserIx, webtoon.ix, content).then(res => {
+        RestAPI.postReview(curUserIx, webtoon.ix, content ).then(res => {
             if (res.msg == 'suc') {
                 LoadWebtoonDetail(webtoon.ix)
             } else {
@@ -116,7 +119,19 @@ export default function WebtoonDetailPage(
             showPageLoaderForStar(false)
         })
     }
-
+    const loginAlert = () => {
+        if(!global.curUser)
+        Alert.alert(
+            '알림', '로그인이 필요한 기능입니다!',
+            [{
+                text: '취소',
+                onPress: () => { }
+            }, {
+                text: '로그인',
+                onPress: () => { navigation.navigate('login') }
+            }]
+        )
+    }
     // let verticalColor = ['rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)'];
     let verticalColor =  ['rgba(255,255,255,0.1)', 'rgba(255,255,255,0.2)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)'];
 
@@ -136,7 +151,7 @@ export default function WebtoonDetailPage(
                     colors={global.deviceType == '1' ? verticalColor : verticalColorTablet}
                     style={global.deviceType == '1' ? styles.verticalGradient : styles.verticalGradientTablet}
                 />
-
+                <View style={{position:"absolute", bottom:'10%',flexDirection:"row"}}>
                 <Image
                     source={{ uri: webtoon.webtoon_image }}
                     style={global.deviceType == '1' ? styles.webtoonItemImage_2 : styles.webtoonItemImageTablet_2}                
@@ -146,10 +161,11 @@ export default function WebtoonDetailPage(
                     <Text style={global.deviceType == '1' ? styles.nameText : styles.nameTextTablet}>{webtoon.name}</Text>
                     <Text style={global.deviceType == '1' ? styles.authorText : styles.authorTextTablet}>{webtoon.author}</Text>
                     <View style={{marginTop:10,flexDirection:"row"}}>
-                        <Text style={{fontSize:18}}><FontAwesome name="star" size={16} color="black" style={{marginRight:5}}/> {webtoon.info.average_rate == '0' ? '없음' : webtoon.info.average_rate}</Text>
-                        <Text style={{fontSize:18,marginLeft:10}}><Entypo name="heart" size={16} color="#f04343" style={{marginRight:5}}/> 88%</Text>
+                        <Text style={{fontSize:global.deviceType == '1' ? 14 : 23}}><FontAwesome name="star" size={global.deviceType == '1' ? 14 : 23} color="black" style={{marginRight:5}}/> {webtoon.info.average_rate == '0' ? '없음' : webtoon.info.average_rate}</Text>
+                        <Text style={{fontSize:global.deviceType == '1' ? 14 : 23,marginLeft:10}}><Entypo name="heart" size={global.deviceType == '1' ? 14 : 23} color="#f04343" style={{marginRight:5}}/> 88%</Text>
                     </View>
                 </View>
+                </View> 
                 <View style={{width:"100%"}}>
                     <View style={styles.line}></View>
                 </View>
@@ -157,31 +173,100 @@ export default function WebtoonDetailPage(
             <View style={[styles.textFieldView,{paddingTop:20}]}>
                 <View style={styles.line}>
                     <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                        <TouchableOpacity style={{borderRadius:5,flexDirection:"row", width:"48%",height:40,backgroundColor:"#a1c98a",justifyContent:"center",alignItems:"center"}}> 
-                            <View style={{width:20,height:20,borderRadius:10,backgroundColor:"#fff"}}>
-                                <FontAwesome5 name="check" size={12}  color="#a1c98a" style={{position:"absolute",top:4,left:4}}/>
+                        <TouchableOpacity style={global.deviceType == '1' ? styles.jambtn : styles.jambtnTablet}> 
+                            <View style={global.deviceType == '1' ? styles.cir : styles.cirTablet}>
+                                <FontAwesome5 name="check" size={global.deviceType == '1' ? 12 : 20}  color="#a1c98a" style={{position:"absolute",top:4,left:4}}/>
                             </View>
-                            <Text style={{color:"#fff"}}> 꿀잼</Text>
+                            <Text style={global.deviceType == '1' ? styles.jamText : styles.jamTextTablet}> 꿀잼</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{borderRadius:5,flexDirection:"row", width:"48%",height:40,backgroundColor:"#535353",justifyContent:"center",alignItems:"center"}}>
-                            <View style={{width:20,height:20,borderRadius:10,backgroundColor:"#fff"}}>
-                                <FontAwesome5 name="check" size={12}  color="#535353" style={{position:"absolute",top:4,left:4}}/>
+                        <TouchableOpacity style={global.deviceType == '1' ? styles.nojambtn : styles.nojambtnTablet}> 
+                            <View style={global.deviceType == '1' ? styles.cir : styles.cirTablet}>
+                                <FontAwesome5 name="check" size={global.deviceType == '1' ? 12 : 20}  color="#535353" style={{position:"absolute",top:4,left:4}}/>
                             </View>
-                            <Text style={{color:"#fff"}}> 노잼</Text>
+                            <Text style={global.deviceType == '1' ? styles.jamText : styles.jamTextTablet}> 노잼</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20,paddingBottom:20}}>
                         <TouchableOpacity style={{flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
-                            <FontAwesome name="star" size={20} color="orange"/>
-                            <Text style={{marginTop:5}}>별점 평가</Text>
+                            <FontAwesome name="star" size={global.deviceType == '1' ? 20 : 30} color="orange"/>
+                            <Text style={global.deviceType == '1' ? styles.menuText : styles.menuTextTablet}>별점 평가</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{flexDirection:"column",justifyContent:"center",alignItems:"center",right:13}}>
-                        <Image source={require('../../../assets/icons/see.png')} style={{width:20,height:20,resizeMode:"contain"}}></Image>
-                            <Text style={{marginTop:5}}>이미 봤어요</Text>
+                        <TouchableOpacity style={{flexDirection:"column",justifyContent:"center",alignItems:"center",right:13}} onPress={() => {
+                    if (!global.curUser)
+                        Alert.alert(
+                            '알림', '로그인이 필요한 기능입니다!',
+                            [{
+                                text: '취소',
+                                onPress: () => { }
+                            }, {
+                                text: '로그인',
+                                onPress: () => { navigation.navigate('login') }
+                            }]
+                        )
+                    else {
+                        if (shownStatus && shownStatus == 'shown') {
+                            Alert.alert('알림', '이미 처리되었습니다. 취소하시겠습니까?',
+                                [{
+                                    text: '취소',
+                                    onPress: () => { }
+                                },
+                                {
+                                    text: '확인',
+                                    onPress: () => {
+                                        if (delShownWebtoon) {
+                                            delShownWebtoon()
+                                        }
+                                    }
+                                }]
+                            )
+
+                        } else {
+                            if (shownWebtoon) {
+                                shownWebtoon()
+                            }
+                        }
+                    }
+                }}>
+                        <Image source={require('../../../assets/icons/see.png')} style={global.deviceType == '1' ? styles.em : styles.emTablet}></Image>
+                            <Text style={[global.deviceType == '1' ? styles.menuText : styles.menuTextTablet, {color: shownStatus && getCurUserIx() && shownStatus == 'shown' ? '#DDD' : Constants.darkColor}]}>이미 봤어요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
-                        <Image source={require('../../../assets/icons/clip.png')} style={{width:20,height:20,resizeMode:"contain"}}></Image>
-                            <Text style={{marginTop:5}}>Pick</Text>
+                        <TouchableOpacity style={{flexDirection:"column",justifyContent:"center",alignItems:"center"}} onPress={() => {
+                            if (!global.curUser)
+                                Alert.alert(
+                                    '알림', '로그인이 필요한 기능입니다!',
+                                    [{
+                                        text: '취소',
+                                        onPress: () => { }
+                                    }, {
+                                        text: '로그인',
+                                        onPress: () => { navigation.navigate('login') }
+                                    }]
+                                )
+                            else {
+                                if (pickStatus && pickStatus == 'picked') {
+                                    Alert.alert('알림', '이미 PICK한 웹툰입니다. PICK목록에서 삭제하시겠습니까?',
+                                        [{
+                                            text: '취소',
+                                            onPress: () => { }
+                                        },
+                                        {
+                                            text: '확인',
+                                            onPress: () => {
+                                                if (delPickWebtoon) {
+                                                    delPickWebtoon()
+                                                }
+                                            }
+                                        }]
+                                    )
+                                } else {
+                                    if (pickWebtoon) {
+                                        pickWebtoon()
+                                    }
+                                }
+                            }
+                        }}>
+                        <Image source={require('../../../assets/icons/clip.png')} style={global.deviceType == '1' ? styles.em : styles.emTablet}></Image>
+                            <Text style={[global.deviceType == '1' ? styles.menuText : styles.menuTextTablet, {color: pickStatus && getCurUserIx() && pickStatus == 'picked' ? '#DDD' : Constants.darkColor }]}>Pick</Text>
                         </TouchableOpacity>
                     </View>    
                 </View>
@@ -189,26 +274,16 @@ export default function WebtoonDetailPage(
             <View style={styles.textFieldView}>
                 <View style={[styles.line,{paddingBottom:20}]}>
                     <Text style={global.deviceType == '1' ? styles.textTitle : styles.textTitleTablet}>보러가기</Text>
-                    { webtoon.info.platform == "네이버" ? 
                     <TouchableOpacity onPress={()=>{
                         navigation.navigate('webView', {
                             selTabIndex: selTabIndex,
                             link: webtoon_link
                         })                       
-                    }} style={{flexDirection:"row",width:"15%"}}><Image source={require('../../../assets/icons/naver_logo.png')} style={{width:20,height:20}}/><Text style={global.deviceType == '1' ? styles.platformText : styles.platformTextTablet}> 네이버</Text></TouchableOpacity>: null}
-                    { webtoon.info.platform == "레진코믹스" ? <TouchableOpacity onPress={()=>{
-                        navigation.navigate('webView', {
-                            selTabIndex: selTabIndex,
-                            link: webtoon_link
-                        })
-                    }} style={{flexDirection:"row",width:"15%"}}><Image source={require('../../../assets/icons/lezhin.png')}  style={{width:20,height:20}}/><Text style={global.deviceType == '1' ? styles.platformText : styles.platformTextTablet}> 레진</Text></TouchableOpacity>: null}
-                    { webtoon.info.platform == "다음" ? <TouchableOpacity onPress={()=>{
-                        navigation.navigate('webView', {
-                            selTabIndex: selTabIndex,
-                            link: webtoon_link
-                        })
-                    }}
-                    style={{flexDirection:"row",width:"15%"}}><Image source={require('../../../assets/icons/daum.png')}  style={{width:20,height:20}}/><Text style={global.deviceType == '1' ? styles.platformText : styles.platformTextTablet}> 레진</Text></TouchableOpacity>: null}
+                    }} style={{flexDirection:"row",width:'18%'}}>
+                      {webtoon.info.platform == "네이버" ? <><Image source={require('../../../assets/icons/naver_logo.png')} style={global.deviceType =='1' ? styles.em : styles.emTablet}/><Text style={[global.deviceType == '1' ? styles.platformText : styles.platformTextTablet,{marginLeft:5}]}> 네이버</Text></>  : null}
+                      {webtoon.info.platform == "레진코믹스" ? <><Image source={require('../../../assets/icons/lezhin.png')}  style={global.deviceType =='1' ? styles.em : styles.emTablet}/><Text style={[global.deviceType == '1' ? styles.platformText : styles.platformTextTablet,{marginLeft:5}]}> 레진</Text></>  : null  }
+                       {webtoon.info.platform == "다음" ? <><Image source={require('../../../assets/icons/daum.png')} style={global.deviceType =='1' ? styles.em : styles.emTablet}/><Text style={[global.deviceType == '1' ? styles.platformText : styles.platformTextTablet,{marginLeft:5}]}> 다음</Text></>  : null}
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.textFieldView}>
@@ -219,21 +294,34 @@ export default function WebtoonDetailPage(
                     </Text>
                 </View>
             </View>
-            <View style={styles.textFieldView}>
-                <Text style={global.deviceType == '1' ? styles.textTitle : styles.textTitleTablet}>정보</Text>
-                <Text style={global.deviceType == '1' ? styles.textField : styles.textFieldTablet}>평균평점: {webtoon.info.average_rate == '0' ? '없음' : webtoon.info.average_rate}</Text>
+            {/* <View style={styles.textFieldView}>
                 <Text style={global.deviceType == '1' ? styles.textField : styles.textFieldTablet}>연재요일: {webtoon.info.ing}</Text>
-                <Text style={global.deviceType == '1' ? styles.textField : styles.textFieldTablet}>연재플랫폼: {webtoon.info.platform}</Text>
-            </View>
+            </View> */}
             <View>
                 <Text style={[global.deviceType == '1' ? styles.textTitle : styles.textTitleTablet,styles.textFieldView]}>내가 쓴 한줄평</Text>
+                {/* {
+                    nickcoment ?
+                    nickcoment.map((item,index)=>(
+                        item.nickname == global.curUser.name ? 
+                        <WebtoonDetailComment
+                        count={webtoon.reviews.count}
+                        data={nickcoment}
+                        status={addView ? addView : false}
+                        addViewClick={() => {
+                            setAddView(true)
+                        }}
+                    /> :null
+                    )) 
+                    : null 
+                    
+                } */}
                 <View style={{
                     ...styles.postView
                     // , height: Platform.OS == 'ios' ? 120 : 80
                 }}>
                     <View style={[styles.textFieldView,{width:'100%',alignItems:"center"}]}>
                         <Text style={[global.deviceType == '1' ? {fontSize:17,fontWeight: 'bold'} : {fontSize:20,fontWeight: 'bold'}]}>별점을 선택해주세요</Text>
-                        <View style={{width:"50%"}}>
+                        <View style={{width:global.deviceType == '1' ? "50%" : "30%"}}>
                          <View style={global.deviceType == '1' ? styles.touchStar : styles.touchStarTablet}>
                         <StarRating
                             disabled={false}
@@ -258,39 +346,48 @@ export default function WebtoonDetailPage(
                                         }]
                                     )
                                 else {
+                                    // setCommentStar(index);
                                     setStarCount(index)
                                     GiveStar(index)
                                 }
                             }}
-                            fullStarColor={Constants.darkColor}
+                            fullStarColor={"orange"}
                             emptyStarColor={'#BBB'}
                             starSize={global.deviceType == '1' ? 30 : 40}
                         />
                         </View>
                         </View>
+                       
                         <Textarea
                             containerStyle={{ ...styles.textAreaContainter, height: Platform.OS == 'ios' ? 80 : 80 }}
                             style={{ ...styles.textArea, height: Platform.OS == 'ios' ? 80 : 80 }}
-                            placeholder={'아직 작성한 한줄평이 없어요!'}
+                            placeholder={global.curUser?'아직 작성한 한줄평이 없어요!':'로그인 후 작성 할 수 있어요!'}
                             maxLength={50}
+                            editable={global.curUser? true: false}
                             placeholderTextColor={'#ccc'}
                             underlineColorAndroid={'transparent'}
                             defaultValue={content}
-                            onChangeText={val => setContent(val)}
+                            ref={input}
+                            onChangeText={(val)=>{
+                                if (!global.curUser){
+                                    setContent('');
+                                 }
+                                else {
+                                    setContent(val);
+                                }                                
+                            }
+                                // val => setContent(val)
+                            }
                             onFocus={() => {
-                                if (closeButtonArea) {
-                                    closeButtonArea()
-                                }
+
                             }}
                             onBlur={() => {
-                                if (outButtonArea) {
-                                    outButtonArea()
-                                }
+
                             }}
                         />
                         <View style={{width:"100%",alignItems:"center"}}>
                             <TouchableOpacity style={styles.postButton}
-                                onPress={() => { PostReview() }}
+                                onPress={() => { global.curUser ? PostReview() :loginAlert() }}
                             >
                                 <Text style={styles.postText}>작성하기</Text>
                             </TouchableOpacity>
@@ -330,6 +427,64 @@ const styles = StyleSheet.create({
         borderBottomWidth:1,
        
     },
+    cir:{
+        width:20,
+        height:20,
+        borderRadius:10,
+        backgroundColor:"#fff"
+    },
+    cirTablet:{
+        width:30,
+        height:30,
+        borderRadius:15,
+        backgroundColor:"#fff"
+    },
+    jambtn : {
+        borderRadius:5,
+        flexDirection:"row",
+        width:"48%",
+        height:40,
+        backgroundColor:"#a1c98a",
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    nojambtn : {
+        borderRadius:5,
+        flexDirection:"row",
+        width:"48%",
+        height:40,
+        backgroundColor:"#535353",
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    jambtnTablet : {
+        borderRadius:5,
+        flexDirection:"row",
+        width:"48%",
+        height:60,
+        backgroundColor:"#a1c98a",
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    nojambtnTablet : {
+        borderRadius:5,
+        flexDirection:"row",
+        width:"48%",
+        height:60,
+        backgroundColor:"#535353",
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    em:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    emTablet:{
+        width:30,
+        height:30,
+        resizeMode:"contain"
+    },
     container: {
         flexDirection: 'column',
         alignItems: 'center',
@@ -345,20 +500,16 @@ const styles = StyleSheet.create({
         opacity:0.4
     },
     webtoonItemImage_2 : {
-        position:"absolute",
+        position:"relative",
         height: Constants.WINDOW_WIDTH / 3,
         width: Constants.WINDOW_WIDTH * 0.35,
-        top:40,
-        left:20,
         zIndex: 999,
         borderRadius:10
     }, 
     webtoonItemImageTablet_2 : {
-        position:"absolute",
+        position:"relative",
         height: Constants.WINDOW_WIDTH / 3,
         width: Constants.WINDOW_WIDTH * 0.35,
-        bottom:40,
-        left:20,
         zIndex: 999,
         borderRadius:10
     },
@@ -369,19 +520,20 @@ const styles = StyleSheet.create({
     },
     WebtoonDetailView : {
         width: Constants.WINDOW_WIDTH * 0.5,
-        position: 'absolute',
-        right: 10,
-        top:50,
-        zIndex: 999
+        left: 20,
+        zIndex: 999,
+        justifyContent:"center"
     },
     WebtoonDetailViewTablet: {
         width: Constants.WINDOW_WIDTH * 0.45,
-        position: 'absolute',
-        right: 15,
-        bottom:40,
-        // top: Constants.WINDOW_WIDTH * 0.5 / 1.8,
-        zIndex: 999
+        left: 50,
+        zIndex: 999,
+        justifyContent:"center"
     },
+    menuText : { fontSize:14,marginTop:5},
+    menuTextTablet:{ fontSize:17,marginTop:5},
+    jamText: {fontSize:14,color:'#fff'},
+    jamTextTablet:{fontSize:20,color:'#fff',marginLeft:5},
     genreText: { color: '#777', fontWeight: 'bold', fontSize: 14 },
     genreTextTablet: { color: '#777', fontWeight: 'bold', fontSize: 18 },
     nameText: { fontSize: 18, fontWeight: 'bold', marginTop: 5 },
@@ -408,6 +560,7 @@ const styles = StyleSheet.create({
     },
     platformTextTablet:{
         fontSize: 20,
+        alignSelf:"center"
     },
     textTitleTablet: {
         fontSize: 20,

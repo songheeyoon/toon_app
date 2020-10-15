@@ -5,28 +5,26 @@ import Constants, { getCurUserIx } from '../../Utils/Constant';
 import RestAPI from '../../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
 // import FastImage from 'react-native-fast-image';
-const order = [
+const img = [
         {
-         "index":1,
          "url":require('../../../assets/images/1.png')
          },
          {
-        "index":2,
         "url":require('../../../assets/images/2.png')  
         },
         {
-        "index":3,
         "url":require('../../../assets/images/3.png')  
         }
    ]
 // 홈페이지 부분의 이미지 아이템
-const ImageItem = ({ image, title, onPress, cate, num }) => {
+const ImageItem = ({ image, title, onPress, cate, num, name, order,last }) => {
 
     return <TouchableOpacity
         style={{ padding: 5 ,alignItems:"center"}}
         onPress={() => { if (onPress) { onPress(image, title) } }}>
             {
-                cate == "가슴뛰는 스포츠 레전드" ? 
+                // cate == "가슴뛰는 스포츠 레전드" ? 
+                order == 0 ?
                 <>
                 <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image_cir : styles.image_cirTablet} PlaceholderContent={<ActivityIndicator />} />
                 <View style={{ ...global.deviceType == '1' ? styles.itemName_cir : styles.itemName_cir}}>
@@ -41,7 +39,7 @@ const ImageItem = ({ image, title, onPress, cate, num }) => {
                 </> : 
                 cate == "입꼬리 주의 개그 레전드" ?
                 <View style={{...global.deviceType == '1' ? styles.num_wrap : styles.Tablet_num_wrap}}>
-                    <Image source={order[num].url} style={{...global.deviceType == '1' ? styles.num_score : styles.Tablet_num_score}}/>
+                    <Image source={img[num].url} style={{...global.deviceType == '1' ? styles.num_score : styles.Tablet_num_score}}/>
                     <View style={{marginLeft:2}}>
                         <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image_num : styles.imageTablet} PlaceholderContent={<ActivityIndicator />} />
                         <View style={{ ...global.deviceType == '1' ? styles.numName : styles.numName}}>
@@ -56,6 +54,7 @@ const ImageItem = ({ image, title, onPress, cate, num }) => {
                     </View>
                 </View>  :
                 cate == "이번주 신작" ?
+                // order == last ?
                 <>
                 <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image : styles.imageTablet} PlaceholderContent={<ActivityIndicator />} />
                 <View style={{ ...global.deviceType == '1' ? styles.itemName : styles.itemNameTablet}}>
@@ -123,6 +122,7 @@ export default function SliderOneRow(props) {
                 showsHorizontalScrollIndicator={false}
             >
 {
+    //  인기 순위 3개로 자르기 
             props.textColor == "입꼬리 주의 개그 레전드" ? 
 
             newArr(props.images).map((item, index) => (
@@ -145,6 +145,9 @@ export default function SliderOneRow(props) {
                             image={item.url}
                             title={item.name}
                             cate={props.textColor}
+                            order={props.index}
+                            name={props.name}
+                            last={props.last}
                             onPress={(img, text) => {
                                 LoadWebtoonDetail(item.ix)
                             }} />
@@ -197,8 +200,8 @@ const styles = StyleSheet.create({
         borderRadius: 15,        
     },
     image_cir:{
-        width: Constants.WINDOW_WIDTH * 0.25,
-        height: Constants.WINDOW_WIDTH * 0.25,
+        width: Constants.WINDOW_WIDTH * 0.27,
+        height: Constants.WINDOW_WIDTH * 0.27,
         resizeMode: 'cover',
         borderRadius: 100, 
         borderWidth:1,

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Alert } fr
 
 import { Entypo } from '@expo/vector-icons';
 import Constants from '../../Utils/Constant';
-
+import { FontAwesome } from '@expo/vector-icons'; 
 
 // 웹툰 프로필에서 해당 웹툰에 Comment달기 및 보여주기
 export default function WebtoonDetailComment({ count, data, status, addViewClick }) {
@@ -24,7 +24,11 @@ export default function WebtoonDetailComment({ count, data, status, addViewClick
             {
                 data.slice(0, 20).map((item, index) => (
                     <View key={index} style={styles.textFieldView}>
-                        <Text>{item.nickname}</Text>
+                        <View style={{width:"100%",flexDirection:"row",alignItems:"center"}}>
+                            <Text style={global.deviceType == '1' ? styles.text : styles.textTablet}>{item.nickname}</Text>
+                            <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                            <TouchableOpacity style={{position:"absolute",right:0}}><Text style={{color:"#999"}}>신고</Text></TouchableOpacity>
+                        </View>
                         <Text style={styles.textField}>{item.content}</Text>
                         <Text>{item.in_date}</Text>
                     </View>
@@ -69,4 +73,10 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         fontSize: 14,
     },
+    text :{
+        fontSize: 14
+    },
+    textTablet:{
+        fontSize: 17
+    }
 })
