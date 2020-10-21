@@ -267,16 +267,18 @@ const RestAPI = {
             })
         })
     },
-    postReview: (curUserIx, webtoonIx, content) => {
+    postReview: (curUserIx, webtoonIx, content, starCount) => {
         let data = new FormData()
         data.append('user_ix', curUserIx)
         data.append('webtoon_ix', webtoonIx)
         data.append('mode', 'review')
         data.append('review', content)
-        // data.append('rate',rate)
+        data.append('rate',starCount)
 
         return new Promise((resolve, reject) => {
+            console.log(data,"api데이터");
             formDataCall('api_webtoon_ok', 'post', data, null, (res, err) => {
+                // console.log(data,"api 데이터");
                 if (err) {
                     reject(err)
                 } else {
@@ -292,6 +294,24 @@ const RestAPI = {
         data.append('webtoon_ix', webtoonIx)
         data.append('rate', rate)
 
+        return new Promise((resolve, reject) => {
+            
+            formDataCall('api_webtoon_ok', 'post', data, null, (res, err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(res)
+                }
+            })
+        })
+    },
+    sendjam : (curUserIx,webtoonIx,rate,jam) => {
+        let data = new FormData()
+        data.append('mode', 'color')
+        data.append('user_ix', curUserIx)
+        data.append('webtoon_ix', webtoonIx)
+        data.append('rate', rate)
+        data.append('jam',jam)
         return new Promise((resolve, reject) => {
             formDataCall('api_webtoon_ok', 'post', data, null, (res, err) => {
                 if (err) {

@@ -159,7 +159,6 @@ export default function HomeView({ navigation, route }) {
                 RestAPI.getHomeWebtoons(getCurUserIx()).then(res => {
                     if (res.success == 1) {
                         getHomeData(res)
-                
                     } else {
                         Alert.alert('로딩 오류', '잠시 후 다시 시도하십시오.', [{ text: '확인' }])
                         showPageLoader(false)
@@ -201,16 +200,13 @@ export default function HomeView({ navigation, route }) {
                     <BannerList imgList={homeData ? homeData.banner : null} navigation={navigation} />
                     {
                         homeData ? homeData.data.map((item, index) => (
-                            index == 0 || index == 1 || index == item.cate_name.length -1 || item.cate_name == "이번주 신작" ?
-                            // item.cate_name == "이번주 신작" || item.cate_name == "가슴뛰는 스포츠 레전드" ||item.cate_name == "입꼬리 주의 개그 레전드"?
+                            item.layout_type == "A" || item.layout_type == "B" || item.layout_type == "C_2" ?
                                     <View key={index} style={global.deviceType == '1' ? styles.slideBodyWhite : styles.slideBodyWhiteTablet}>
                                     <Text style={global.deviceType == '1' ? styles.slideBodyWhiteInverseTitle : styles.slideBodyWhiteInverseTitleTablet}>{item.cate_name}</Text>
                                     <SliderOneRow
-                                        textColor={item.cate_name} 
+                                        type={item.layout_type} 
                                         images={item.webtoon_list}
                                         navigation={navigation}
-                                        index={index}
-                                        last={item.cate_name.length-1}
                                         />
                                     </View>
                              :
@@ -219,14 +215,16 @@ export default function HomeView({ navigation, route }) {
                                     <SliderTwoRow
                                         textColor='black' 
                                         images={item.webtoon_list}
-                                        navigation={navigation} />
+                                        navigation={navigation} 
+                                        type={item.layout_type}
+                                        />
                                 </View>
                         )) :
                             <View style={{
                                 flex: 1, justifyContent: 'center', alignItems: 'center',
                                 width: Constants.WINDOW_WIDTH,
-                                height: Platform.OS == 'ios' ? Constants.WINDOW_HEIGHT - 160 - topPadding() : Constants.WINDOW_HEIGHT - 110 - topPadding(),
-                                marginTop: -Constants.WINDOW_WIDTH * 0.8,
+                                height: Platform.OS == 'ios' ? Constants.WINDOW_HEIGHT - topPadding() -120 : Constants.WINDOW_HEIGHT - topPadding() -80,
+                                marginTop: global.deviceType == '1' ? -Constants.WINDOW_WIDTH *0.7: -Constants.WINDOW_HEIGHT * 0.35
                             }}>
                                 <View style={Platform.OS == 'ios' ? styles.container_other_ios : styles.container_other} >
                                     {
@@ -287,6 +285,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         justifyContent: 'center',
         borderRadius: 21,
-        backgroundColor: 'white',
+        backgroundColor: 'white'
     }
 });

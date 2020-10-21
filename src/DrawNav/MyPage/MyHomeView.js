@@ -59,7 +59,7 @@ export default function MyPage({ route, navigation }) {
                         평가한 웹툰 {myDetail ? myDetail.evaluated_count : null}
                     </Text>
                     <Progress.Bar
-                        progress={myDetail ? myDetail.evaluated_count / 100 : null}
+                        progress={myDetail ? myDetail.evaluated_count>=100 ? 0.75+(myDetail.evaluated_count%50/200): myDetail.evaluated_count/100 : 0}
                         borderColor={Constants.mainColor}
                         borderWidth={1.5}
                         unfilledColor={Constants.mainColor}
@@ -81,6 +81,7 @@ export default function MyPage({ route, navigation }) {
                                 style={{ width: Constants.WINDOW_WIDTH }}
                                 renderItem={({ item, index, separators }) => {
                                     let webtoon = item;
+                                    // console.log(item,"작가순위");
                                     if (webtoon) {
                                         return (
                                             <View style={styles.preferInnerView}>

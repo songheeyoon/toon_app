@@ -6,7 +6,7 @@ import Constants from '../../Utils/Constant';
 import { FontAwesome } from '@expo/vector-icons'; 
 
 // 웹툰 프로필에서 해당 웹툰에 Comment달기 및 보여주기
-export default function WebtoonDetailComment({ count, data, status, addViewClick }) {
+export default function WebtoonDetailComment({ count, data, status, addViewClick ,order}) {
 
     if (!data) {
         return null
@@ -14,10 +14,34 @@ export default function WebtoonDetailComment({ count, data, status, addViewClick
     if (status) {
         return data.map((item, index) => (
             <View key={index} style={styles.textFieldView}>
-                <Text>{item.nickname}</Text>
-                <Text style={styles.textField}>{item.content}</Text>
-                <Text>{item.in_date}</Text>
+            <View style={{width:"100%",flexDirection:"row",alignItems:"center"}}>
+                <Text style={global.deviceType == '1' ? styles.text : styles.textTablet}>{item.nickname}</Text>
+                
+                { item.rate == 1 ?  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> : null }
+                { item.rate == 2 ? <Text> <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> </Text>: null                                                 
+                }
+                { item.rate == 3 ? <Text> <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> </Text>: null                                                 
+                }
+                { item.rate == 4 ? <Text> <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> </Text>: null                                                 
+                }
+                { item.rate == 5 ? <Text> <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                      <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> </Text>: null                                                 
+                }
+                {/* <TouchableOpacity style={{position:"absolute",right:0}}><Text style={{color:"#999"}}>신고</Text></TouchableOpacity> */}
+            
             </View>
+            <Text style={styles.textField}>{item.content}</Text>
+            <Text style={{color:"#777"}}>{item.in_date}</Text>
+        </View>
         ))
     } else {
         return <>
@@ -26,11 +50,31 @@ export default function WebtoonDetailComment({ count, data, status, addViewClick
                     <View key={index} style={styles.textFieldView}>
                         <View style={{width:"100%",flexDirection:"row",alignItems:"center"}}>
                             <Text style={global.deviceType == '1' ? styles.text : styles.textTablet}>{item.nickname}</Text>
-                            <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
-                            <TouchableOpacity style={{position:"absolute",right:0}}><Text style={{color:"#999"}}>신고</Text></TouchableOpacity>
+                            
+                            { item.rate == 1 ?  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> : null }
+                            { item.rate == 2 ? <Text> <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> </Text>: null                                                 
+                            }
+                            { item.rate == 3 ? <Text> <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{paddingLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> </Text>: null                                                 
+                            }
+                            { item.rate == 4 ? <Text> <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> </Text>: null                                                 
+                            }
+                            { item.rate == 5 ? <Text> <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/>
+                                                  <FontAwesome name="star" size={global.deviceType == '1' ? 14 : 20} color="orange" style={{marginLeft: global.deviceType == '1' ? 10 : 5}}/> </Text>: null                                                 
+                            }
+                            {/* <TouchableOpacity style={{position:"absolute",right:0}}><Text style={{color:"#999"}}>신고</Text></TouchableOpacity> */}
+                        
                         </View>
                         <Text style={styles.textField}>{item.content}</Text>
-                        <Text>{item.in_date}</Text>
+                        <Text style={{color:"#777"}}>{item.in_date}</Text>
                     </View>
                 ))
             }
@@ -68,9 +112,10 @@ const styles = StyleSheet.create({
         marginBottom:10
     },
     textField: {
-        color: '#777',
+        // color: '#777',
         fontWeight: 'bold',
-        paddingVertical: 5,
+        paddingTop: 10,
+        paddingBottom:15,
         fontSize: 14,
     },
     text :{

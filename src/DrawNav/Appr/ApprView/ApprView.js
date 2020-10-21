@@ -81,6 +81,35 @@ export default function ApprView({ route, navigation }) {
         }
     }, [pageIndex, selTabIndex])
 
+    useFocusEffect(React.useCallback(
+        () => {
+            Appr(1)
+        },
+        []
+    ))
+  
+    const Appr = (number) => {
+        showPageLoader(true)
+        RestAPI.apprWebtoon(getCurUserIx(), number, 'plus', 'main', '').then(res => {
+            if (res.msg == 'suc') {
+                if (res.count) global.apprCount = res.count
+                else global.apprCount = 0
+                setCountAppr(global.apprCount)
+
+                showPageLoader(false)
+            } else {
+                Alert.alert('적재 오류', '잠시 후 다시 시도하십시오.', [{ text: '확인' }])
+                showPageLoader(false)
+            }
+        }).catch(err => {
+            Alert.alert('로딩 오류', '문제가 발생했습니다. 잠시 후 다시 시도하십시오.', [{ text: '확인' }])
+            showPageLoader(false)
+            // Alert.alert('로딩 오류', 'apprWebtoon error : ' + err.message, [{ text: '확인' }])
+        }).finally(() => {
+            showPageLoader(false)
+         })
+    }
+
     // 웹툰 목록 로딩
     const LoadAppr = (number) => {
         showPageLoader(true)

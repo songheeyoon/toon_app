@@ -49,7 +49,7 @@ export const StarList = ({ item, index, onLoadWebtoonDetail, onGiveStarCount }) 
                         setStars(val)
                         onGiveStarCount(val, webtoon.ix)
                     }}
-                    fullStarColor={Constants.darkColor}
+                    fullStarColor={"orange"}
                     emptyStarColor={'#ccc'}
                     starSize={global.deviceType == '1' ? 25 : 35}
                 />

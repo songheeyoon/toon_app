@@ -20,21 +20,24 @@ export default function DetailView({ route, navigation }) {
     const [isShowBottomBar, setIsShowBottomBar] = useState(false)
     const [pickStatus, getPickStatus] = useState('unPicked')
     const [refuseStatus, getRefuseStatus] = useState('unRefuse')
-    const [shownStatus, getShownStatus] = useState('unShown')
+    const [shownStatus, getShownStatus] = useState()
     const [isOpen, getIsOpen] = useState(false);
+    
     let keyboardShowListener = useRef(null);
     let keyboardHideListener = useRef(null)
 
     useFocusEffect(React.useCallback(() => {
         CheckWebtoonPick()
         setIsShowBottomBar(true)
+        // CheckWebtoonShown()
         // toggleMainView()
     }, [route.params.webtoon.ix]))
 
     useEffect(() => {
         // CheckWebtoonPick()
-        CheckWebtoonRefuse()
-        CheckWebtoonShown()
+        // CheckWebtoonRefuse()
+        // CheckWebtoonShown()
+        // CheckJame()
         keyboardShowListener.current = Keyboard.addListener('keyboardDidShow', ()=>getIsOpen(true));
         keyboardHideListener.current = Keyboard.addListener('keyboardDidHide', ()=>getIsOpen(false));
 
@@ -112,7 +115,7 @@ export default function DetailView({ route, navigation }) {
             showPageLoader(false)
             return
         }).finally(() => {
-            CheckWebtoonShown()
+            CheckWebtoonPick()
             showPageLoader(false)
         })
     }
@@ -121,10 +124,15 @@ export default function DetailView({ route, navigation }) {
     const CheckWebtoonPick = () => {
         RestAPI.checkPickWebtoon(getCurUserIx(), route.params.webtoon.ix).then(res => {
             console.log("the pick status from server is : ", res)
-            if (res.msg == 'suc') {
-                getPickStatus('unPicked')
+            if (res.pick == '1') {
+                getPickStatus('picked')     
             } else {
-                getPickStatus('picked')
+                getPickStatus('unPicked')
+            }       
+            if( res.shown == '1'){
+                getShownStatus('shown')
+            }else{
+                getShownStatus('unShown')
             }
         }).catch(err => {
             Alert.alert('로딩 오류', '잠시 후 다시 시도하십시오.', [{ text: '확인' }])
@@ -273,7 +281,7 @@ export default function DetailView({ route, navigation }) {
                         setIsShowBottomBar(false)
                         getPickStatus('unPicked')
                         getRefuseStatus()
-                        getShownStatus()
+                        getShownStatus("unShown")
                         navigation.goBack()
                     }}>
                         <MaterialCommunityIcons name="chevron-left" size={30} color={Constants.mainColor} />
@@ -320,6 +328,7 @@ export default function DetailView({ route, navigation }) {
                         pickStatus={pickStatus}
                         refuseStatus={refuseStatus}
                         shownStatus={shownStatus}
+
                         pickWebtoon={() => {
                             PickWebtoon()
                         }}

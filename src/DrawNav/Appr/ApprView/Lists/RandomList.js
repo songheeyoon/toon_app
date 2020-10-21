@@ -74,8 +74,8 @@ export const StarList = ({ item, index, onLoadWebtoonDetail, onGiveStarCount, on
                             onGiveStarCount(val, webtoon.ix)
                         }
                     }}
-                    fullStarColor={Constants.darkColor}
-                    emptyStarColor={'#CCC'}
+                    fullStarColor={"orange"}
+                    emptyStarColor={'#BBB'}
                     starSize={global.deviceType == '1' ? 25 : 35}
                 />
             </TouchableOpacity>

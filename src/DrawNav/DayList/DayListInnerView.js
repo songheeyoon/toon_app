@@ -117,6 +117,7 @@ export default function DayListInnerView({ selIndex, navigation }) {
     const [platformTabIndex, setPlatformTabIndex] = useState(0)
     const [dayWebtoonList, setDayWebtoonList] = useState()
 
+
     const LoadDayList = () => {
         RestAPI.getDayList(getCurUserIx(), NumToDay(selIndex), NumToPlatform(platformTabIndex)).then(res => {
             setDayWebtoonList(res)

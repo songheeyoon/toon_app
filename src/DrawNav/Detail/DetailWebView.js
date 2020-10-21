@@ -8,6 +8,7 @@ import HeaderRight from '../Components/HeaderRight';
 import BottomBar from '../Components/BottomBar';
 import Constants from '../../Utils/Constant';
 import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // 해당 웹툰의 외부링크 인앱 브라우저로 켜기
 export default function DetailWebView({navigation, route}) {
@@ -22,20 +23,26 @@ export default function DetailWebView({navigation, route}) {
     
     let jsStr = ` 
     var initTop=0;
+    var delta = 15;
     window.addEventListener('scroll',function(e){
-        var info = navigator.userAgent.toLowerCase();
+    
         var currTop;
-
-        if(info.indexOf('iphone')>=0){
+        
+        currTop=document.documentElement.scrollTop;
+        if(currTop==0){
             currTop=document.body.scrollTop;
+        }
+
+        if((currTop>initTop)&&(initTop>0)){
+                window.ReactNativeWebView.postMessage('none');
         }else{
-            currTop=document.documentElement.scrollTop;
+            if(currTop + window.innerHeight < document.documentElement.scrollHeight-30) {
+               window.ReactNativeWebView.postMessage('flex');  
+            }  
+            
         }
-        if(currTop>initTop){
-            window.ReactNativeWebView.postMessage('none');              
-        }else if(currTop<=initTop){
-            window.ReactNativeWebView.postMessage('flex');  
-        }
+
+
         initTop = currTop;
     });
     true;
@@ -62,12 +69,13 @@ export default function DetailWebView({navigation, route}) {
                 }}
             />
             <WebView 
-                style={{flex: 1}}
+                style={{flex: 1, marginTop: Platform.OS == 'ios' && show == "none" ? 60 : 0}}
                 source={{ uri: link ? link : ''}}
                 decelerationRate={100} // 속도 높이려고 추가
                 javaScriptEnabled={true}
                 injectedJavaScript={jsStr}
                 onMessage={(event)=>{
+                    console.log(event.nativeEvent.data);
                     setShow(event.nativeEvent.data);    
                 }}
             />

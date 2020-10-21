@@ -104,7 +104,7 @@ export default function BannerList({ imgList, navigation }) {
     }
 
     return (
-        <View style={styles.containter}>
+        <View style={global.deviceType == '1' ? styles.containter : styles.containtertablet}>
 
             <ScrollView
                 ref={scrollRef}
@@ -141,12 +141,12 @@ export default function BannerList({ imgList, navigation }) {
                                     link: image.link
                                 })
                             }}
-                            style={{paddingHorizontal:10}}
+                            style={{paddingHorizontal:10,borderRadius:20}}
                         >
                             <Image
                                 key={index}
                                 source={{ uri: image.url }}
-                                style={styles.image}
+                                style={global.deviceType == '1' ? styles.image : styles.imagetablet}
                                 PlaceholderContent={<ActivityIndicator />}
                             />
                         </TouchableOpacity>
@@ -172,7 +172,7 @@ export const IndicatorView = ({ itemList, curStep }) => {
                         backgroundColor: isSel ? 'rgb(255,255,255)' : '#b5b5b5',
                         marginHorizontal: 3,
                         width: 20,
-                        height: 8
+                        height: 5
                     }}>
                 </View>
             }) : null
@@ -183,13 +183,23 @@ export const IndicatorView = ({ itemList, curStep }) => {
 const styles = StyleSheet.create({
     containter: {
         width: Constants.WINDOW_WIDTH,
-        height: Constants.WINDOW_WIDTH*0.8,
+        height: Constants.WINDOW_WIDTH-20,
+    },
+    containtertablet:{
+        width: Constants.WINDOW_WIDTH,
+        height: Constants.WINDOW_HEIGHT*0.33,
     },
     image: {
         width: Constants.WINDOW_WIDTH-20,
-        height: Constants.WINDOW_WIDTH*0.8,
+        height: Constants.WINDOW_WIDTH-20,
         borderRadius:10,
         resizeMode:"cover"
+    },
+    imagetablet:{
+        width: Constants.WINDOW_WIDTH-20,
+        height: Constants.WINDOW_HEIGHT*0.33,
+        borderRadius:10,
+        resizeMode:"contain"
     },
     pagenation: {
         flexDirection: 'row',

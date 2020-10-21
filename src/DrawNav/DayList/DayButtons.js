@@ -13,7 +13,7 @@ export default function DayButtons({ selIndex, onDayButton }) {
     // },[]))
 
     return (
-        <View style={{...styles.dayButtonsView, marginBottom : Platform.OS == 'ios' ? 50 : 10}}>
+        <View style={{...styles.dayButtonsView, marginBottom : Platform.OS == 'ios' ? 70 : 10}}>
             <View style={{width: 50, height: Constants.WINDOW_HEIGHT * 0.45, justifyContent: Platform.OS == 'ios' ? 'space-around' : 'space-between', alignItems: 'center'}}>
                 {
                     Constants.WeekList.map((item, idx) => {

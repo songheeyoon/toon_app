@@ -22,7 +22,7 @@ export default function ApprTopHeader({ count }) {
                 평가한 웹툰 {apprCount ? apprCount : 0}
             </Text>
             <Progress.Bar
-                progress={apprCount ? apprCount / 100 : 0}
+                progress={apprCount ? apprCount>=100 ? 0.75+(apprCount%50/200) : apprCount/100 : 0}
                 borderColor={Constants.mainColor}
                 borderWidth={1.5}
                 unfilledColor={Constants.mainColor}

@@ -17,16 +17,18 @@ const img = [
         }
    ]
 // 홈페이지 부분의 이미지 아이템
-const ImageItem = ({ image, title, onPress, cate, num, name, order,last }) => {
+const ImageItem = ({ image, title, onPress, type, num }) => {
 
     return <TouchableOpacity
-        style={{ padding: 5 ,alignItems:"center"}}
+        style={{ paddingLeft: 5, paddingRight:5, alignItems:"center"}}
         onPress={() => { if (onPress) { onPress(image, title) } }}>
             {
-                // cate == "가슴뛰는 스포츠 레전드" ? 
-                order == 0 ?
+        
+                type == "A" ?
                 <>
+                <View style={global.deviceType == '1' ? styles.cir : styles.cirTablet} >
                 <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image_cir : styles.image_cirTablet} PlaceholderContent={<ActivityIndicator />} />
+                </View>
                 <View style={{ ...global.deviceType == '1' ? styles.itemName_cir : styles.itemName_cir}}>
                 <Text style={{ ...global.deviceType == '1' ? styles.imageItemTitle_cir : styles.imageItemTitleTablet_cir}}>
                     {
@@ -37,12 +39,13 @@ const ImageItem = ({ image, title, onPress, cate, num, name, order,last }) => {
                 </Text>
                 </View>
                 </> : 
-                cate == "입꼬리 주의 개그 레전드" ?
+                // 순위
+                type == "B" ?
                 <View style={{...global.deviceType == '1' ? styles.num_wrap : styles.Tablet_num_wrap}}>
                     <Image source={img[num].url} style={{...global.deviceType == '1' ? styles.num_score : styles.Tablet_num_score}}/>
                     <View style={{marginLeft:2}}>
-                        <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image_num : styles.imageTablet} PlaceholderContent={<ActivityIndicator />} />
-                        <View style={{ ...global.deviceType == '1' ? styles.numName : styles.numName}}>
+                        <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image_num : styles.image_numTablet} PlaceholderContent={<ActivityIndicator />} />
+                        <View style={{ ...global.deviceType == '1' ? styles.numName : styles.numNameTablet}}>
                         <Text style={{ ...global.deviceType == '1' ? styles.imageItemTitle_num : styles.imageItemTitleTablet}}>
                             {
                                 title.length > 8 ?
@@ -53,9 +56,8 @@ const ImageItem = ({ image, title, onPress, cate, num, name, order,last }) => {
                     </View>
                     </View>
                 </View>  :
-                cate == "이번주 신작" ?
-                // order == last ?
-                <>
+
+                <View style={[global.deviceType == '1' ? styles.image : styles.imageTablet,{overflow:"hidden"}]}>
                 <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image : styles.imageTablet} PlaceholderContent={<ActivityIndicator />} />
                 <View style={{ ...global.deviceType == '1' ? styles.itemName : styles.itemNameTablet}}>
                 <Text style={{ ...global.deviceType == '1' ? styles.imageItemTitle : styles.imageItemTitleTablet}}>
@@ -66,7 +68,7 @@ const ImageItem = ({ image, title, onPress, cate, num, name, order,last }) => {
                     }
                 </Text>
                 </View>
-                </>  : null            
+                </View>           
             }
     </TouchableOpacity>
 }
@@ -123,14 +125,14 @@ export default function SliderOneRow(props) {
             >
 {
     //  인기 순위 3개로 자르기 
-            props.textColor == "입꼬리 주의 개그 레전드" ? 
+            props.type == "B" ? 
 
-            newArr(props.images).map((item, index) => (
+            props.images.map((item, index) => (
                 <View style={{ padding: 2 }} key={index}>
                 <ImageItem
                     image={item.url}
                     title={item.name}
-                    cate={props.textColor}
+                    type={props.type}
                     num={index}
                     onPress={(img, text) => {
                         LoadWebtoonDetail(item.ix)
@@ -144,10 +146,7 @@ export default function SliderOneRow(props) {
                         <ImageItem
                             image={item.url}
                             title={item.name}
-                            cate={props.textColor}
-                            order={props.index}
-                            name={props.name}
-                            last={props.last}
+                            type={props.type}
                             onPress={(img, text) => {
                                 LoadWebtoonDetail(item.ix)
                             }} />
@@ -179,11 +178,12 @@ const styles = StyleSheet.create({
     },
     Tablet_num_wrap:{
         flexDirection:"row", 
-        width: Constants.WINDOW_WIDTH * 0.3, 
-        height: Constants.WINDOW_WIDTH * 0.15
+        width: Constants.WINDOW_WIDTH * 0.2, 
+        height: Constants.WINDOW_WIDTH * 0.15,
+  
     },
     Tablet_num_score:{
-        width: Constants.WINDOW_WIDTH * 0.1,
+        width: Constants.WINDOW_WIDTH * 0.05,
         height: Constants.WINDOW_WIDTH * 0.15, 
         borderRadius: 5       
     },
@@ -191,29 +191,41 @@ const styles = StyleSheet.create({
         width: Constants.WINDOW_WIDTH * 0.4,
         height: Constants.WINDOW_WIDTH * 0.3,
         resizeMode: 'cover',
-        borderRadius: 15,
+        borderRadius: 5,
     },
     imageTablet: {
         width: Constants.WINDOW_WIDTH * 0.2,
         height: Constants.WINDOW_WIDTH * 0.15,
         resizeMode: 'cover',
-        borderRadius: 15,        
+        borderRadius: 5,        
     },
-    image_cir:{
+    cir:{
         width: Constants.WINDOW_WIDTH * 0.27,
         height: Constants.WINDOW_WIDTH * 0.27,
         resizeMode: 'cover',
         borderRadius: 100, 
         borderWidth:1,
         borderColor:'#000',
+        overflow:"hidden",
     },
-    image_cirTablet:{
+    cirTablet:{
         width: Constants.WINDOW_WIDTH * 0.2,
         height: Constants.WINDOW_WIDTH * 0.2,
         resizeMode: 'cover',
         borderRadius: 100, 
         borderWidth:1,
-        borderColor:'#000'       
+        borderColor:'#000',   
+        overflow:"hidden"
+    },
+    image_cir:{
+        width: Constants.WINDOW_WIDTH * 0.27,
+        height: Constants.WINDOW_WIDTH * 0.27,
+        resizeMode: 'cover',
+    },
+    image_cirTablet:{
+        width: Constants.WINDOW_WIDTH * 0.2,
+        height: Constants.WINDOW_WIDTH * 0.2,
+        resizeMode: 'cover',    
     },
     image_num:{
         width: Constants.WINDOW_WIDTH * 0.3,
@@ -221,14 +233,20 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         borderRadius: 5,          
     },
+    image_numTablet:{
+        width: Constants.WINDOW_WIDTH * 0.15, 
+        height: Constants.WINDOW_WIDTH * 0.15,  
+        borderRadius: 5,    
+    },
     itemName : {
         width:'100%',
         position:"absolute",
-        borderBottomLeftRadius: 15,
-        borderBottomRightRadius: 15,
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
         backgroundColor:'rgba(0,0,0,0.7)',
-        bottom:5,
-        left:5,    
+        bottom:0,
+        left:0,    
+        height:22
     },
     numName :{
         width:'100%',
@@ -238,28 +256,40 @@ const styles = StyleSheet.create({
         backgroundColor:'rgba(0,0,0,0.7)',
         bottom:0,
         left:0,          
+        height:22
+    },
+    numNameTablet :{
+        width:'100%',
+        position:"absolute",
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
+        backgroundColor:'rgba(0,0,0,0.7)',
+        bottom:0,
+        left:0,          
+        height:28
     },
     itemNameTablet :{
         width:'100%',
         position:"absolute",
-        borderBottomLeftRadius: 15,
-        borderBottomRightRadius: 15,
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
         backgroundColor:'rgba(0,0,0,0.7)',
-        bottom:5,
-        left:5,    
+        bottom:0,
+        left:0, 
+        height:28   
     },
     itemName_cir:{
         alignItems:"center"
     },
     imageItemTitle: {
         fontSize: 15,
-        marginVertical: 3,
+        // marginVertical: 3,
         marginHorizontal: 5,
         textAlign: 'left',
         paddingHorizontal: 5,
         bottom:0,
         color:'#fff',
-        paddingVertical:2,
+        lineHeight:22
     },
     imageItemTitle_cir: {
         fontSize: 12,
@@ -283,22 +313,21 @@ const styles = StyleSheet.create({
     },
     imageItemTitle_num :{
         fontSize: 12,
-        marginVertical: 3,
         marginHorizontal: 5,
         textAlign: 'left',
         paddingHorizontal: 5,
         bottom:0,
         color:'#fff',
-        paddingVertical:2,        
+        lineHeight:22      
     },
     imageItemTitleTablet: {
 
-        fontSize: 17,
-        marginVertical: 3,
-        marginHorizontal: 5,
+        fontSize: 14,
+        // marginVertical: 3,
+        // marginHorizontal: 5,
         textAlign: 'left',
         paddingHorizontal: 5,
         color:'#fff',
-        paddingVertical:4,
+        lineHeight:28
     }
 })

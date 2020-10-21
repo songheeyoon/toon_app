@@ -27,7 +27,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.cock.picktoon",
-      "buildNumber": "11",
+      "buildNumber": "22",
       "requireFullScreen": true,
       "supportsTablet": true,
       "icon": "./assets/icon.png",
