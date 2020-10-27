@@ -154,7 +154,7 @@ export default function SignupAgreeScreen({ navigation }) {
                                 <TouchableOpacity onPress={()=>{
                                     Linking.openURL('https://picktoon.com/policy_info.html');
                                 }}>
-                                    <Text style={{ textDecorationLine: 'underline', color: '#666', fontSize: 16 }}>개인정보 수집 및 이용 안내 </Text>
+                                    <Text style={{ textDecorationLine: 'underline', color: '#666', fontSize: 15 }}>개인정보 수집 및 이용 안내 </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}
                                     onPress={() => {
@@ -169,7 +169,7 @@ export default function SignupAgreeScreen({ navigation }) {
                                         }
                                     }}
                                 >
-                                    <Text style={{ color: '#666', fontSize: 16 }}>에 동의합니다.(필수)</Text>
+                                    <Text style={{ color: '#666', fontSize: 15 }}>에 동의합니다.(필수)</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -200,7 +200,7 @@ export default function SignupAgreeScreen({ navigation }) {
                                 <TouchableOpacity onPress={()=>{
                                       Linking.openURL('https://picktoon.com/policy_use.html');
                                 }}>
-                                    <Text style={{ textDecorationLine: 'underline', color: '#666', fontSize: 16 }}>서비스 이용약관</Text>
+                                    <Text style={{ textDecorationLine: 'underline', color: '#666', fontSize: 15 }}>서비스 이용약관</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}
                                     onPress={() => {
@@ -215,7 +215,7 @@ export default function SignupAgreeScreen({ navigation }) {
                                         }
                                     }}
                                 >
-                                    <Text style={{ color: '#666', fontSize: 16, }}>에 동의합니다.(필수)</Text>
+                                    <Text style={{ color: '#666', fontSize: 15, }}>에 동의합니다.(필수)</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -290,7 +290,7 @@ export default function SignupAgreeScreen({ navigation }) {
                                 <TouchableOpacity onPress={()=>{
                                      Linking.openURL('https://picktoon.com/policy_event.html');
                                 }}>
-                                    <Text style={{ textDecorationLine: 'underline', color: '#666', fontSize: 16 }}>픽툰 신작 및 이벤트 정보수신</Text>
+                                    <Text style={{ textDecorationLine: 'underline', color: '#666', fontSize: 15 }}>픽툰 신작 및 이벤트 정보수신</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}
                                     onPress={() => {
@@ -305,7 +305,7 @@ export default function SignupAgreeScreen({ navigation }) {
                                         }
                                     }}
                                 >
-                                    <Text style={{ color: '#666', fontSize: 16, }}>에 동의합니다.(선택)</Text>
+                                    <Text style={{ color: '#666', fontSize: 15, }}>에 동의합니다.(선택)</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

@@ -6,7 +6,7 @@ import { WebView } from 'react-native-webview';
 
 import HeaderRight from '../Components/HeaderRight';
 import BottomBar from '../Components/BottomBar';
-import Constants from '../../Utils/Constant';
+import Constants, { isIPhoneX } from '../../Utils/Constant';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -69,13 +69,12 @@ export default function DetailWebView({navigation, route}) {
                 }}
             />
             <WebView 
-                style={{flex: 1, marginTop: Platform.OS == 'ios' && show == "none" ? 60 : 0}}
+                style={{flex: 1, marginTop: Platform.OS == 'ios' && show == "none" ? isIPhoneX()? 60 :30 : 0}}
                 source={{ uri: link ? link : ''}}
                 decelerationRate={100} // 속도 높이려고 추가
                 javaScriptEnabled={true}
                 injectedJavaScript={jsStr}
                 onMessage={(event)=>{
-                    console.log(event.nativeEvent.data);
                     setShow(event.nativeEvent.data);    
                 }}
             />

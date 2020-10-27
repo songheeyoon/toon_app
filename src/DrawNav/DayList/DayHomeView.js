@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import '@expo/vector-icons';
 import { Image } from 'react-native-elements';
 
-import Constants, { topPadding, getCurUserIx, NumToDay, getDayName, convertDayToNum } from '../../Utils/Constant';
+import Constants, { topPadding, getCurUserIx, NumToDay, getDayName, convertDayToNum, isIPhoneX } from '../../Utils/Constant';
 import BottomBar from '../Components/BottomBar';
 import DayButtons from './DayButtons';
 import RestAPI from '../../Utils/RestAPI';
@@ -224,7 +224,7 @@ export default function DayHomeView({ route, navigation }) {
                                     disableRightSwipe
                                     keyExtractor={(item, index) => index.toString()}
                                     contentContainerStyle={{
-                                        paddingBottom: Platform.OS == 'ios' ? 130 : 80,
+                                        paddingBottom: Platform.OS == 'ios' ? isIPhoneX() ? 130 :100 : 70,
                                         width: Constants.WINDOW_WIDTH - 50 }}
                                     data={selectDayWebtoon}
                                     renderItem={(data, rowMap) => (

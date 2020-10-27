@@ -4,7 +4,7 @@ import { Image, rating } from 'react-native-elements';
 import StarRating from 'react-native-star-rating';
 import '@expo/vector-icons';
 
-import Constants, { getCurUserIx, zeroArray } from '../../../../Utils/Constant';
+import Constants, { getCurUserIx, zeroArray, isIPhoneX } from '../../../../Utils/Constant';
 import RestAPI from '../../../../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -26,7 +26,7 @@ export const StarList = ({ item, index, onLoadWebtoonDetail, onGiveStarCount, on
             }}
         >
             <Image
-                source={{ uri: webtoon.image_link }}
+                source={{ uri: webtoon.image_link , cache: 'force-cache'}}
                 style={global.deviceType == '1' ? styles.webtoonItemImage : styles.webtoonItemImageTablet}
                 PlaceholderContent={<ActivityIndicator />}
             />
@@ -54,7 +54,7 @@ export const StarList = ({ item, index, onLoadWebtoonDetail, onGiveStarCount, on
                     halfStar={'ios-star-half'}
                     iconSet={'Ionicons'}
                     maxStars={5}
-                    rating={stars}
+                    rating={global.curUser ? stars : 0}
                     selectedStar={(val) => {
 
                         if (!global.curUser)
@@ -133,7 +133,7 @@ export default function RandomList({ selIndex, genreIndex, platformIndex, data, 
 
 
     return (
-        <View style={{ flex: 1, paddingBottom: Platform.OS == 'ios' ? 50 : 0 }}>
+        <View style={{ flex: 1, paddingBottom: isIPhoneX() ? 50 : 0 }}>
             <FlatList
                 ref={flatRef}
                 data={curData}

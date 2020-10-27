@@ -36,7 +36,7 @@ export default function PickRandomList({ navigation, selIndex }) {
     // 픽한 웹툰 목록 가져오기
     const LoadMyData = (type) => {
         showPageLoader(true)
-        RestAPI.getPickApprWebtoon(getCurUserIx(), type).then(res => {
+        RestAPI.getPickApprWebtoon(getCurUserIx() == '' ? global.ipAddress : getCurUserIx(), type).then(res => {
             setLoadData(res)
         }).catch(err => {
             Alert.alert('로딩 오류', '문제가 발생하였습니다. 잠시 후 다시 시도하십시오.', [{ text: '확인' }])
@@ -128,7 +128,7 @@ export default function PickRandomList({ navigation, selIndex }) {
                                         <Text style={global.deviceType == '1' ? styles.genreText : styles.genreTextTablet}>{webtoon.genre}</Text>
                                         <Text numberOfLines={1} style={global.deviceType == '1' ? styles.nameText : styles.nameTextTablet}>{webtoon.title}</Text>
                                         <Text style={global.deviceType == '1' ? styles.authorText : styles.authorTextTablet}>{webtoon.author}</Text>
-                                        <TouchableOpacity 
+                                        {/* <TouchableOpacity 
                                             style={styles.delPickBtn}
                                             onPress={() => {
                                                 Alert.alert(
@@ -145,8 +145,8 @@ export default function PickRandomList({ navigation, selIndex }) {
                                                 )
                                             }}
                                         >
-                                            <Text style={{ color: 'white', fontSize: global.deviceType == '1' ? 14 : 16 }}>PICK 삭제</Text>
-                                        </TouchableOpacity>
+                                            <Text style={{ color: 'white', fontSize: global.deviceType == '1' ? 14 : 16 }}>삭제</Text>
+                                        </TouchableOpacity>  */}
                                     </View>
                                 </View>
                             )

@@ -27,16 +27,18 @@
     },
     "ios": {
       "bundleIdentifier": "com.cock.picktoon",
-      "buildNumber": "22",
+      "buildNumber": "24",
       "requireFullScreen": true,
       "supportsTablet": true,
       "icon": "./assets/icon.png",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "package": "com.cock.picktoon",
-      "versionCode": 1,
-      "googleServicesFile": "./google-services.json"
+      "versionCode": 4,
+      "googleServicesFile": "./google-services.json",
+      "permissions": []
     }
   }
 }

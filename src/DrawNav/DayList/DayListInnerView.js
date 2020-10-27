@@ -4,7 +4,7 @@ import '@expo/vector-icons';
 import { Image } from 'react-native-elements';
 
 
-import Constants, { getCurUserIx, NumToDay, NumToPlatform } from '../../Utils/Constant';
+import Constants, { getCurUserIx, NumToDay, NumToPlatform, isIPhoneX } from '../../Utils/Constant';
 import TabButtonsPlatform from '../Appr/TabButtonsPlatform';
 import RestAPI from '../../Utils/RestAPI';
 
@@ -59,7 +59,7 @@ export function WebtoonList({ navigation, data, refreshData }) {
     }
 
     return (
-        <View style={{ flex: 1, paddingBottom: Platform.OS == 'ios' ? 105 : 50}}>
+        <View style={{ flex: 1, paddingBottom: isIPhoneX() ? 105 : 50}}>
             <FlatList
                 ref={flatRef}
                 data={listData ? listData : null}
@@ -119,6 +119,7 @@ export default function DayListInnerView({ selIndex, navigation }) {
 
 
     const LoadDayList = () => {
+
         RestAPI.getDayList(getCurUserIx(), NumToDay(selIndex), NumToPlatform(platformTabIndex)).then(res => {
             setDayWebtoonList(res)
         }).catch(err => {

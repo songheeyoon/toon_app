@@ -4,7 +4,7 @@ import '@expo/vector-icons';
 import { Image } from 'react-native-elements';
 import StarRating from 'react-native-star-rating';
 
-import Constants, { getCurUserIx } from '../../../../Utils/Constant';
+import Constants, { getCurUserIx, isIPhoneX } from '../../../../Utils/Constant';
 import RestAPI from '../../../../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -122,7 +122,7 @@ export default function RecentRandomList({ navigation, selIndex }) {
     }
 
     return (
-        <View style={{ flex: 1, paddingTop: 10, paddingBottom: Platform.OS == 'ios' ? 50 : 0 }}>
+        <View style={{ flex: 1, paddingTop: 10, paddingBottom: Platform.OS == 'ios' ? isIPhoneX() ? 50 : 30 : 0 }}>
             {
                 loadData && loadData.apprCount != 0 ?
                     <FlatList

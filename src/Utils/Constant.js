@@ -52,6 +52,7 @@ export function NumToDay(num) {
     else if (num == 4) day = '금'
     else if (num == 5) day = '토'
     else if (num == 6) day = '일'
+    else if (num == 7) day = '완결'
     return day
 }
 
@@ -117,16 +118,16 @@ const Constants = {
 
     WINDOW_WIDTH: Dimensions.get('window').width,
     WINDOW_HEIGHT: Dimensions.get('window').height,
-    HeaderHeight: Platform.OS == 'ios' ? 90 : 65,
-    BottomHeight: Platform.OS == 'ios' ? 70 : 50,
+    HeaderHeight: Platform.OS == 'ios' ? isIPhoneX() ? 90 : 70 : 65,
+    BottomHeight: Platform.OS == 'ios' ? isIPhoneX() ? 70 : 60 : 50,
 
     TitleList: ['전체', '장르별', '플랫폼별'],
     GenreList: ['일상', '개그', '드라마', '액션', '판타지', '로맨스', '감성', '스릴러', '시대극', '스포츠'],
     PlatformList: ['네이버', '다음', '레진'],
     FilterListAppr: ['전체', '평점순', '가나다순'],
     FilterListPick: ['전체', '가나다순', '최신순'],
-    WeekList: ['월', '화', '수', '목', '금', '토', '일'],
-    WeekListDay: ['월', '화', '수', '목', '금', '토', '일'],
+    WeekList: ['월', '화', '수', '목', '금', '토', '일','완\n결'],
+    WeekListDay: ['월', '화', '수', '목', '금', '토', '일','완결'],
     AccountList: ['닉네임 변경', '비밀번호 변경', '탈퇴하기'],
     ClientList: ['1:1 문의', '문의내역', 'FAQ공지'],
     ContactList: [

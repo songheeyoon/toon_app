@@ -83,31 +83,25 @@ export default function ApprView({ route, navigation }) {
 
     useFocusEffect(React.useCallback(
         () => {
-            Appr(1)
+            getMyPageDetail()
         },
         []
     ))
-  
-    const Appr = (number) => {
-        showPageLoader(true)
-        RestAPI.apprWebtoon(getCurUserIx(), number, 'plus', 'main', '').then(res => {
-            if (res.msg == 'suc') {
-                if (res.count) global.apprCount = res.count
-                else global.apprCount = 0
-                setCountAppr(global.apprCount)
 
-                showPageLoader(false)
-            } else {
-                Alert.alert('적재 오류', '잠시 후 다시 시도하십시오.', [{ text: '확인' }])
-                showPageLoader(false)
-            }
+    const getMyPageDetail = () => {
+        showPageLoader(true)
+        RestAPI.getMyPage(getCurUserIx()).then(res => {
+      
+            if (res.evaluated_count) global.apprCount = res.evaluated_count
+            else global.apprCount = 0
+            setCountAppr(global.apprCount)
         }).catch(err => {
             Alert.alert('로딩 오류', '문제가 발생했습니다. 잠시 후 다시 시도하십시오.', [{ text: '확인' }])
+            // Alert.alert('로딩 오류', 'getMyPage error : ' + err.message, [{ text: '확인' }])
             showPageLoader(false)
-            // Alert.alert('로딩 오류', 'apprWebtoon error : ' + err.message, [{ text: '확인' }])
         }).finally(() => {
             showPageLoader(false)
-         })
+        })
     }
 
     // 웹툰 목록 로딩
@@ -115,10 +109,6 @@ export default function ApprView({ route, navigation }) {
         showPageLoader(true)
         RestAPI.apprWebtoon(getCurUserIx(), number, 'plus', 'main', '').then(res => {
             if (res.msg == 'suc') {
-
-                if (res.count) global.apprCount = res.count
-                else global.apprCount = 0
-                setCountAppr(global.apprCount)
 
                 let newData = []
                 if (number == 1) {

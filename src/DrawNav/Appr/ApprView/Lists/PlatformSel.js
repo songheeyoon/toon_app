@@ -77,6 +77,7 @@ export default function PlatformSel({ selIndex, navigation, onCountAppr, getRefr
     const LoadPlatform = (number) => {
         
         RestAPI.apprWebtoon(getCurUserIx(), number, 'plus', 'main', '').then(res => {
+            
             if (res.msg == 'suc') {
                 let newData = []
                 if (number == 2) {

@@ -22,10 +22,12 @@ import ClientCenterViewContact from './MyPage/ClientCenterViewContact';
 import ClientCenterViewHistory from './MyPage/ClientCenterViewHistory';
 import ClientCenterViewFaq from './MyPage/ClientCenterViewFaq';
 import ClientCenterViewBoard from './MyPage/ClientCenterViewBoard';
+import ClientCenterViewBoardDetail from './MyPage/ClientCenterViewBoardDetail';
 import SearchView from './Search/SearchView';
 import RestAPI from '../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
-
+import * as Network from 'expo-network';
+import BannerLinkView from '../DrawNav/Home/BannerLinkView';
 
 
 const Drawer = createDrawerNavigator();
@@ -143,13 +145,15 @@ const ApprWebttonList = ({ navigation, data }) => {
 export const CustomDrawerContent = (props) => {
 
     const [pickApprWebtoonData, getPickApprWebtoonData] = useState()
+    const [ip,setIp] = useState();
     let isEnabledOne = '';
     let isEnabledTwo = '';
     let isEnabledThree = '';
 
+
     // 해당 유저의 픽 및 평가한 웹툰 목록 가져오기
     const ApprPickWebtoon = () => {
-        RestAPI.getPickApprWebtoon(getCurUserIx(), '0').then(res => {
+        RestAPI.getPickApprWebtoon(getCurUserIx() == '' ? global.ipAddress : getCurUserIx(), '0').then(res => {
             getPickApprWebtoonData(res)
         }).catch(err => {
             Alert.alert('로딩 오류', '인터넷 연결 확인 후 다시 시도해주세요.', [{ text: '확인' }])
@@ -183,11 +187,11 @@ export const CustomDrawerContent = (props) => {
                 <MaterialCommunityIcons name="close" size={28} onPress={() => props.navigation.closeDrawer()} />
             </View>
             <View style={styles.pickView}>
-                <Text style={{ fontSize: 16 }}>PICK한 웹툰</Text>
+                <Text style={{ fontSize: 16 }}>최근 본 웹툰</Text>
                 {
                     pickApprWebtoonData && pickApprWebtoonData.pickCount == 0 ?
                         <View style={{ padding: 30 }}>
-                            <Text style={{ color: '#888' }}>PICK한 웹툰이 없습니다.</Text>
+                            <Text style={{ color: '#888' }}>최근 본 웹툰이 없습니다.</Text>
                         </View> :
                         <PickWebtoonList navigation={props.navigation} data={pickApprWebtoonData} />
                 }
@@ -335,11 +339,13 @@ export default function DrawNavigation({ navigation }) {
             <Drawer.Screen name="clientCenterHistory" component={ClientCenterViewHistory} />
             <Drawer.Screen name="clientCenterFaq" component={ClientCenterViewFaq} />
             <Drawer.Screen name="clientCenterBoard" component={ClientCenterViewBoard} />
+            <Drawer.Screen name="clientCenterBoardDetail" component={ClientCenterViewBoardDetail} />
 
             {/* 기타 페이지 */}
             <Drawer.Screen name="detailView" component={DetailView} />
             <Drawer.Screen name="webView" component={DetailWebView} />
             <Drawer.Screen name="search" component={SearchView} />
+            <Drawer.Screen name="banner" component={BannerLinkView} />
 
         </Drawer.Navigator>
     )

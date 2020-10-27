@@ -98,5 +98,6 @@ const styles = StyleSheet.create({
     webtoonList: {
         flex: 1,
         width: Constants.WINDOW_WIDTH,
+        
     },
 });

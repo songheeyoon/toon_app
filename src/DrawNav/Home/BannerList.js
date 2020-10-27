@@ -16,7 +16,14 @@ export default function BannerList({ imgList, navigation }) {
     let [step, setStep] = useState(stepper)
     let [inidcatorIndex, setIndicatorIndex] = useState(0)
     let scrollRef = useRef()
-
+    // console.log(imgList,"list");
+    // const tabbanner = imgList.filter((item)=>{
+    //     return item.d_type == 'tab'
+    // })
+    // const mobbanner = imgList.filter((item)=>{
+    //     return item.d_type == 'mob'
+    // })
+    // console.log(tabbanner,"tabbanner");
     useFocusEffect(React.useCallback(() => {
         if (timeInterval) {
             clearInterval(timeInterval)
@@ -28,6 +35,9 @@ export default function BannerList({ imgList, navigation }) {
         }
     }, []))
 
+    useEffect(()=>{
+
+    },[imgList])
     useEffect(() => {
         if (timeInterval) {
             clearInterval(timeInterval)
@@ -131,27 +141,47 @@ export default function BannerList({ imgList, navigation }) {
 
                 }}
             >
+            { global.deviceType == '1' ?
+                imgList ? imgList.filter(item => item.d_type == 'mob').map((image,index)=>(
+                    <TouchableOpacity key={index}
+                    onPress={()=>{
+                        navigation.navigate(image.page, {
+                            selTabIndex: 1,
+                            link: image.link, 
+                        })
+                    }}
+                    style={{paddingHorizontal:10,borderRadius:20}}
+                >
+                    <Image
+                        key={index}
+                        source={{ uri: image.url }}
+                        style={styles.image}
+                        PlaceholderContent={<ActivityIndicator />}
+                    />
+                </TouchableOpacity>
 
-                {
-                    imgList ? imgList.map((image, index) => (
-                        <TouchableOpacity key={index}
-                            onPress={()=>{
-                                navigation.navigate('webView', {
-                                    selTabIndex: 1,
-                                    link: image.link
-                                })
-                            }}
-                            style={{paddingHorizontal:10,borderRadius:20}}
-                        >
-                            <Image
-                                key={index}
-                                source={{ uri: image.url }}
-                                style={global.deviceType == '1' ? styles.image : styles.imagetablet}
-                                PlaceholderContent={<ActivityIndicator />}
-                            />
-                        </TouchableOpacity>
-                    )) : null
-                }
+                ))  : null :
+                imgList ? imgList.filter(item => item.d_type == 'tab').map((image,index)=>(
+                    <TouchableOpacity key={index}
+                    onPress={()=>{
+                        navigation.navigate(image.page, {
+                            selTabIndex: 1,
+                            link: image.link,
+                            
+                        })
+                    }}
+                    style={{paddingHorizontal:10,borderRadius:20}}
+                >
+                    <Image
+                        key={index}
+                        source={{ uri: image.url }}
+                        style={styles.imagetablet}
+                        PlaceholderContent={<ActivityIndicator />}
+                    />
+                </TouchableOpacity>
+
+                )) :null                
+            }
             </ScrollView>
             <View style={styles.pagenation}>
                 <IndicatorView itemList={imgList} curStep={inidcatorIndex} />
@@ -163,20 +193,34 @@ export default function BannerList({ imgList, navigation }) {
 export const IndicatorView = ({ itemList, curStep }) => {
 
     return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
-        {
-            itemList ? itemList.map((item, index) => {
-                let isSel = curStep == index
-                return <View
-                    key={'indicator_' + index}
-                    style={{
-                        backgroundColor: isSel ? 'rgb(255,255,255)' : '#b5b5b5',
-                        marginHorizontal: 3,
-                        width: 20,
-                        height: 5
-                    }}>
-                </View>
-            }) : null
-        }
+
+        { global.deviceType == '1' ?
+                itemList ? itemList.filter(item => item.d_type == 'mob').map((image,index)=>{
+                    let isSel = curStep == index
+                    return <View
+                        key={'indicator_' + index}
+                        style={{
+                            backgroundColor: isSel ? 'rgb(255,255,255)' : '#b5b5b5',
+                            marginHorizontal: 3,
+                            width: 20,
+                            height: 5
+                        }}>
+                    </View>
+                })  : null :
+                itemList ? itemList.filter(item => item.d_type == 'tab').map((image,index)=>{
+                    let isSel = curStep == index
+                    return <View
+                        key={'indicator_' + index}
+                        style={{
+                            backgroundColor: isSel ? 'rgb(255,255,255)' : '#b5b5b5',
+                            marginHorizontal: 3,
+                            width: 20,
+                            height: 5
+                        }}>
+                    </View>
+
+                }) :null                
+            }
     </View>
 }
 
@@ -199,7 +243,7 @@ const styles = StyleSheet.create({
         width: Constants.WINDOW_WIDTH-20,
         height: Constants.WINDOW_HEIGHT*0.33,
         borderRadius:10,
-        resizeMode:"contain"
+        resizeMode:"cover"
     },
     pagenation: {
         flexDirection: 'row',

@@ -252,6 +252,23 @@ const RestAPI = {
             })
         })
     },
+    PostLatesList:(curUserIx,webtoonIx)=>{
+        let data = new FormData()
+ 
+        data.append('user_ix', curUserIx)
+        data.append('webix', webtoonIx)
+        data.append('mode','realtime')
+
+        return new Promise((resolve, reject) => {
+            formDataCall('api_webtoon_ok', 'post', data, null, (res, err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(res)
+                }
+            })
+        })        
+    },
     getWebtoonDetail: (curUserIx, webtoonIx) => {
         let data = new FormData()
         data.append('user_ix', curUserIx)

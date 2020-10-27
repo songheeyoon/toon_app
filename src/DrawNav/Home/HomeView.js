@@ -4,7 +4,7 @@ import { Header } from 'react-native-elements';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { UIActivityIndicator, MaterialIndicator } from "react-native-indicators";
 
-import Constants, { topPadding, getCurUserIx, isIOS } from '../../Utils/Constant';
+import Constants, { topPadding, getCurUserIx, isIOS, isIPhoneX } from '../../Utils/Constant';
 import BottomBar from '../Components/BottomBar';
 import BannerList from './BannerList';
 import SliderTwoRow from './SliderTwoRow';
@@ -187,7 +187,7 @@ export default function HomeView({ navigation, route }) {
                     marginTop: Platform.OS == 'ios' ? 0 : -15,
                 }}
             />
-            <View style={Platform.OS == 'ios' ? styles.containerIOS : styles.container}>
+            <View style={isIPhoneX() ? styles.containerIOS : styles.container}>
                 <ScrollView
                     ref={scrollRef}
                     refreshControl={

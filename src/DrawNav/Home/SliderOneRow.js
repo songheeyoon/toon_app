@@ -6,15 +6,10 @@ import RestAPI from '../../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
 // import FastImage from 'react-native-fast-image';
 const img = [
-        {
-         "url":require('../../../assets/images/1.png')
-         },
-         {
-        "url":require('../../../assets/images/2.png')  
-        },
-        {
-        "url":require('../../../assets/images/3.png')  
-        }
+        { "url":require('../../../assets/images/1.png')}, {"url":require('../../../assets/images/2.png')},{"url":require('../../../assets/images/3.png')},
+        { "url":require('../../../assets/images/4.png')}, {"url":require('../../../assets/images/5.png')},{"url":require('../../../assets/images/6.png')},
+        { "url":require('../../../assets/images/7.png')}, {"url":require('../../../assets/images/8.png')},{"url":require('../../../assets/images/9.png')},
+        { "url":require('../../../assets/images/10.png')} 
    ]
 // 홈페이지 부분의 이미지 아이템
 const ImageItem = ({ image, title, onPress, type, num }) => {

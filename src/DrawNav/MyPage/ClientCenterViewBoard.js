@@ -10,9 +10,11 @@ import BottomBar from '../Components/BottomBar';
 import RestAPI from '../../Utils/RestAPI';
 
 // 공지사항 페이지
-const ContentView = ({ data }) => {
+const ContentView = ({ data, navigation }) => {
     let initialValue = data ? zeroArray(data.length) : []
     const [faqValue, setFaqValue] = useState(initialValue)
+
+    //공지사항 눌렀는지 check 
     useFocusEffect(React.useCallback(() => {
         setFaqValue(initialValue)
     }, []))
@@ -21,6 +23,7 @@ const ContentView = ({ data }) => {
             {
                 data ?
                     data.map((faqItem, idx) => {
+                        console.log(faqItem,"item");
                         return (
                             <View key={idx}>
                                 <TouchableOpacity
@@ -29,17 +32,17 @@ const ContentView = ({ data }) => {
                                         borderBottomWidth: 1, borderColor: '#EEE'
                                     }}
                                     onPress={() => {
-                                        faqValue && faqValue[idx] == 1 ? initialValue[idx] = 0 : initialValue[idx] = 1;
                                         setFaqValue(initialValue)
+                                            navigation.navigate('clientCenterBoardDetail',{data: faqItem, index : faqItem.ix})
                                     }}>
                                     <Text style={{ fontSize: 15, color: Constants.darkColor }}>{faqItem.question} </Text>
-                                    {
+                                    {/* {
                                         faqValue && faqValue[idx] == 1
                                             ? <Entypo name="chevron-thin-up" color={'#999'} size={20} />
                                             : <Entypo name="chevron-thin-down" color={'#999'} size={20} />
-                                    }
+                                    } */}
                                 </TouchableOpacity>
-                                {
+                                {/* {
                                     faqValue && faqValue[idx] == 1 ?
                                         <View style={{
                                             flexDirection: 'column', paddingLeft: 30, paddingRight: 20, paddingVertical: 20,
@@ -48,7 +51,7 @@ const ContentView = ({ data }) => {
                                             <Text style={{ fontSize: 15, color: '#999', paddingBottom: 10 }}>{faqItem.answer}</Text>
                                         </View> :
                                         <View></View>
-                                }
+                                } */}
                             </View>
                         )
                     }) : null
@@ -60,12 +63,12 @@ const ContentView = ({ data }) => {
 // 고객센터에서 공지사항 페이지
 export default function ClientCenterViewBoard({ route, navigation }) {
     const [faqList, setFaqList] = useState()
-
     // 공지 목록 가져오기
     const getFaqList = () => {
         showPageLoader(true)
         RestAPI.getBoard().then(res => {
             setFaqList(res)
+           
         }).catch(err => {
             Alert.alert('로딩 오류', '문제가 발생했습니다. 잠시 후 다시 시도하십시오.', [{ text: '확인' }])
         }).finally(() => {
@@ -99,7 +102,7 @@ export default function ClientCenterViewBoard({ route, navigation }) {
                         <View style={styles.titleView}>
                             <Text style={{ fontSize: 18, fontWeight: 'bold' }}> </Text>
                         </View>
-                        <ContentView data={faqList} />
+                        <ContentView data={faqList} navigation={navigation}/>
                     </View>
                 </View>
             </View>

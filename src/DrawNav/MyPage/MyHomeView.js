@@ -223,12 +223,13 @@ const styles = StyleSheet.create({
     preferGenreView: {
         flexDirection: 'column',
         width: Constants.WINDOW_WIDTH,
-        padding: 10
+        padding: 10,
     },
     preferGenreInnerView: {
         width: Constants.WINDOW_WIDTH * 0.21,
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+       
     },
     genreTitleList: {
         color: Constants.mainColor,

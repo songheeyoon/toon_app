@@ -51,7 +51,7 @@ export default function PickView({ route, navigation }) {
             />
             <View style={styles.container}>
                 <View style={styles.progressBarField}>
-                    <Text style={global.deviceType == '1' ? styles.progressText : styles.progressTextTablet}>PICK한 웹툰</Text>
+                    <Text style={global.deviceType == '1' ? styles.progressText : styles.progressTextTablet}>최근 본 웹툰</Text>
                 </View>
 
                 <View style={styles.webtoonList}>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, ScrollView, StyleSheet, Text, TouchableOpacity, Alert, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Constants, {getCurUserIx} from '../../Utils/Constant';
+import Constants, {getCurUserIx, isIPhoneX} from '../../Utils/Constant';
 
 // 보텀 바
 export default function BottomBar(props) {
@@ -14,7 +14,7 @@ export default function BottomBar(props) {
                     props.navigation.navigate('home', {userIx: getCurUserIx()});
                 }}
                 style={styles.tabWidth}>
-                <View style={{...props.selTab == '1' ?  styles.selTabView :  styles.tabView, paddingBottom: Platform.OS == 'ios' ? 15 : null}}>
+                <View style={{...props.selTab == '1' ?  styles.selTabView :  styles.tabView, paddingBottom: Platform.OS == 'ios' ? isIPhoneX() ? 15 : null :null}}>
                     <Image source={require('../../../assets/images/c-menu_link-0.png')} style={{ width: 25, resizeMode: 'contain' }} />
                 </View>
             </TouchableOpacity>
@@ -23,7 +23,7 @@ export default function BottomBar(props) {
                     props.navigation.navigate('dayHome');
                 }}
                 style={styles.tabWidth}>
-                <View style={{...props.selTab == '3' ?  styles.selTabView :  styles.tabView, paddingBottom: Platform.OS == 'ios' ? 15 : null}}>
+                <View style={{...props.selTab == '3' ?  styles.selTabView :  styles.tabView, paddingBottom: Platform.OS == 'ios' ? isIPhoneX() ? 15 : null :null}}>
                     <Image source={require('../../../assets/images/c-menu_link-2.png')} style={{ width: 25, resizeMode: 'contain' }} />
                 </View>
             </TouchableOpacity>
@@ -32,7 +32,7 @@ export default function BottomBar(props) {
                     props.navigation.navigate('appr', {userIx: getCurUserIx()});
                 }}
                 style={styles.tabWidth}>
-                <View style={{...props.selTab == '2' ?  styles.selTabView :  styles.tabView, paddingBottom: Platform.OS == 'ios' ? 15 : null}}>
+                <View style={{...props.selTab == '2' ?  styles.selTabView :  styles.tabView, paddingBottom: Platform.OS == 'ios' ? isIPhoneX() ? 15 : null :null}}>
                     <Image source={require('../../../assets/images/c-menu_link-1.png')} style={{ width: 25, resizeMode: 'contain' }} />
                 </View>
             </TouchableOpacity>
@@ -52,7 +52,7 @@ export default function BottomBar(props) {
                         props.navigation.navigate('myHome');
                 }}
                 style={styles.tabWidth}>
-                <View style={{...props.selTab == '4' ?  styles.selTabView :  styles.tabView, paddingBottom: Platform.OS == 'ios' ? 15 : null}}>
+                <View style={{...props.selTab == '4' ?  styles.selTabView :  styles.tabView, paddingBottom: Platform.OS == 'ios' ? isIPhoneX() ? 15 : null :null}}>
                     <Image source={require('../../../assets/images/c-menu_link-3.png')} style={{ width: 25, resizeMode: 'contain' }} />
                 </View>
             </TouchableOpacity>

@@ -24,18 +24,14 @@ import { TouchableItem } from 'react-native-tab-view';
 export default function WebtoonDetailPage(
     { webtoonDetail, 
       navigation,
-      closeButtonArea,
-      outButtonArea,
     //   기능 option
       selTabIndex,
       webtoon_link,
-      pickStatus,
-      refuseStatus,
+      favoritedStatus,
       shownStatus,
       pickWebtoon,
-      delPickWebtoon,
-      refuseWebtoon,
-      delRefuseWebtoon,
+      addFavorites,
+      delFavorites,
       shownWebtoon,
       delShownWebtoon,
     //   onPressTopBar 
@@ -62,14 +58,14 @@ export default function WebtoonDetailPage(
         setAddView(false)
         setContent('')
         setJam(webtoonDetail.jam)
-        setReview(webtoonDetail.reviews.details);
-        setStarCount(Number(webtoonDetail.rate))
-        
-        // console.log(webtoon.reviews.details,"디테일")
+        setReview(webtoonDetail.reviews.details);   
+        setStarCount(Number(webtoonDetail.rate)) // console.log(webtoon.reviews.details,"디테일")
     }, [webtoonDetail])
-    useEffect(() => {
 
-     }, [starCount]);
+    useEffect(() => {
+       
+     }, [starCount,favoritedStatus]);
+
      useEffect(() => {
         reviewreset();
     }, [review]);
@@ -81,8 +77,7 @@ export default function WebtoonDetailPage(
             }
          })      
      }
-     
-    
+
     useFocusEffect(React.useCallback(()=>{
         flatRef.current.scrollToPosition(0)
     }, []))
@@ -213,6 +208,8 @@ export default function WebtoonDetailPage(
         })
     }
 }
+
+
     // const GiveStar = (index) => {
 
     //     showPageLoaderForStar(true)
@@ -254,7 +251,7 @@ export default function WebtoonDetailPage(
     let verticalColor =  ['rgba(255,255,255,0.1)', 'rgba(255,255,255,0.2)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)'];
 
     // let verticalColorTablet = ['rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)', 'rgba(255,255,255,0)'];
-    let verticalColorTablet = ['rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,1)','rgba(255,255,255,1)','rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)'];
+    let verticalColorTablet = ['rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,0.8)','rgba(255,255,255,0.8)','rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)'];
 
     return (
         <KeyboardAwareScrollView 
@@ -270,7 +267,7 @@ export default function WebtoonDetailPage(
                     colors={global.deviceType == '1' ? verticalColor : verticalColorTablet}
                     style={global.deviceType == '1' ? styles.verticalGradient : styles.verticalGradientTablet}
                 />
-                <View style={{position:"absolute", bottom:'20%',flexDirection:"row"}}>      
+                <View style={[global.deviceType == '1' ? {bottom:'20%',position:"absolute",flexDirection:"row"} : {bottom:'15%',position:"absolute",flexDirection:"row"} ]}>      
                 <Image
                     source={{ uri: webtoon.webtoon_image }}
                     style={global.deviceType == '1' ? styles.webtoonItemImage_2 : styles.webtoonItemImageTablet_2}                
@@ -373,8 +370,8 @@ export default function WebtoonDetailPage(
                                     }]
                                 )
                             else {
-                                if (pickStatus && pickStatus == 'picked') {
-                                    Alert.alert('알림', '이미 PICK한 웹툰입니다. PICK목록에서 삭제하시겠습니까?',
+                                if (favoritedStatus && favoritedStatus == 'favorited') {
+                                    Alert.alert('알림', '이미 즐겨찾기 한 웹툰입니다. 목록에서 삭제하시겠습니까?',
                                         [{
                                             text: '취소',
                                             onPress: () => { }
@@ -382,22 +379,20 @@ export default function WebtoonDetailPage(
                                         {
                                             text: '확인',
                                             onPress: () => {
-                                                if (delPickWebtoon) {
-                                                    delPickWebtoon()
-                                                }
+                                                delFavorites(webtoon.ix);
                                             }
                                         }]
                                     )
                                 } else {
                                     if (pickWebtoon) {
-                                        pickWebtoon()
+                                        addFavorites(webtoon.info.ing,webtoon.ix);
                                     }
                                 }
                             }
                         }}>
                         
-                            <Foundation name="paperclip" size={global.deviceType == '1' ? 20 : 30} color= {getCurUserIx() && pickStatus == 'picked' ? "#DDD":"#535353"} />
-                            <Text style={[global.deviceType == '1' ? styles.menuText : styles.menuTextTablet, {color: pickStatus && getCurUserIx() && pickStatus == 'picked' ? '#DDD' : Constants.darkColor }]}>Pick</Text>
+                            <Foundation name="paperclip" size={global.deviceType == '1' ? 20 : 30} color= {getCurUserIx() && favoritedStatus == 'favorited' ? "#DDD":"#535353"} />
+                            <Text style={[global.deviceType == '1' ? styles.menuText : styles.menuTextTablet, {color: favoritedStatus && getCurUserIx() && favoritedStatus == 'favorited' ? '#DDD' : Constants.darkColor }]}>즐겨찾기</Text>
                         </TouchableOpacity>
                     </View>    
                 </View>
@@ -446,7 +441,7 @@ export default function WebtoonDetailPage(
                             halfStar={'ios-star-half'}
                             iconSet={'Ionicons'}
                             maxStars={5}
-                            rating={starCount}
+                            rating={global.curUser ? starCount : 0}
                             selectedStar={(index) => {
                                 if (!global.curUser)
                                     Alert.alert(
@@ -637,7 +632,7 @@ const styles = StyleSheet.create({
         borderRadius:10
     },
     webtoonItemImageTablet: {
-        height: Constants.WINDOW_WIDTH / 2.5,
+        height: Constants.WINDOW_HEIGHT * 0.35,
         width: Constants.WINDOW_WIDTH,
         opacity:0.4
     },
