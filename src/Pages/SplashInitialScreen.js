@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Linking, Image, View, AsyncStorage, Platform, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { Notifications } from 'expo'
+// import { Notifications } from 'expo'
 import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
 import * as Application from 'expo-application';
 import * as Network from 'expo-network';
+
+import * as Notifications from 'expo-notifications';
 
 export default function SplashInitialScreen({ route, navigation }) {
 
@@ -76,7 +78,7 @@ export default function SplashInitialScreen({ route, navigation }) {
                 return
             }
         }
-        let token = await Notifications.getExpoPushTokenAsync();
+        let token = (await Notifications.getExpoPushTokenAsync()).data;
         return token;
     }
 

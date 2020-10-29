@@ -4,6 +4,7 @@ import { Image } from 'react-native-elements';
 import Constants, { getCurUserIx } from '../../Utils/Constant';
 import RestAPI from '../../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
+import * as Analytics from 'expo-firebase-analytics';
 // import FastImage from 'react-native-fast-image';
 const img = [
         { "url":require('../../../assets/images/1.png')}, {"url":require('../../../assets/images/2.png')},{"url":require('../../../assets/images/3.png')},
@@ -99,7 +100,7 @@ export default function SliderOneRow(props) {
     // 웹툰 상세정보 얻기
     const LoadWebtoonDetail = (webtoonIx) => {
         RestAPI.getWebtoonDetail(curUserIx, webtoonIx).then(res => {
-            if (res.success == 1) {
+            if (res.success == 1) {             
                 console.log(res.data[0],"res값");
                 props.navigation.navigate('detailView', { webtoon: res.data[0], selTabIndex: '1' });
             } else {

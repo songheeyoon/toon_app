@@ -140,9 +140,12 @@ const RestAPI = {
         data.append('aToken', aToken)
         data.append('rToken', rToken)
 
+        // console.log(data,"로그인데이터");
+
         if (global.expoPushToken && global.UUID) {
             data.append('push_token', global.expoPushToken)
             data.append('uuid', global.UUID)
+            // console.log("this is socialLogin api: ", global.expoPushToken + "+" + global.UUID)
         }
 
         return new Promise((resolve, reject) => {
@@ -167,6 +170,7 @@ const RestAPI = {
             // console.log("this is emailLogin api: ", global.expoPushToken + "+" + global.UUID)
             data.append('push_token', global.expoPushToken)
             data.append('uuid', global.UUID)
+            // console.log(global.expoPushToken,"이메일로그인 회원가입");
         }
 
         return new Promise((resolve, reject) => {

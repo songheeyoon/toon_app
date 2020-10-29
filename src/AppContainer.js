@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavigationContainer, useLinking } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as Analytics from 'expo-firebase-analytics';
 
 import DrawNavigation from './DrawNav/DrawNavigation';
 import LoginScreen from './Pages/LoginScreen';
@@ -14,6 +15,8 @@ const Stack = createStackNavigator()
 
 export default function AppContainer() {
   const ref = useRef();
+  const routeNameRef = useRef();
+
   const prefix = Linking.makeUrl('/');
   const [isReady, setIsReady] = useState(false);
   const [initialState, setInitialState] = useState();
@@ -43,11 +46,15 @@ export default function AppContainer() {
                 clientCenterHistory : 'clientcenterhistory',
                 clientCenterFaq : 'clientcenterfaq',
                 clientCenterBoard : 'clientcenterboard',
-                detailView : 'detailview',
-                webView : {
-                  path:'webview',
+                clientCenterBoardDetail:{
+                  path:"clientCenterBoardDetail",
                   params:''
                 },
+                detailView : {
+                  path:"detailview",
+                  params:''
+                },
+                webView : "webview",
                 search : 'search'
               }
             },
@@ -70,32 +77,30 @@ export default function AppContainer() {
             });
         }, [getInitialState]);
       
-        // useEffect(()=>{
-
-        //   const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
-        //     // It didn't work for me
-      
-        //     console.log(toggle+"알림눌렀을때1");
-        //     if(Platform.OS ==='ios'){
-        //     const link = response.notification.request.content.data.body.screen;
-        //     setScreen(link);
-        //     Linking.openURL(link);
-        //     }else{
-        //       const link = response.notification.request.content.data.screen;
-        //       setScreen(link);
-        //       Linking.openURL(link);
-        //     }
-        //     console.log(toggle+"알림눌렀을때2");
-        //   });
-        //   return() => subscription.remove();
-        // },[])
 
         if (!isReady) {
           return null;
         }
       
   return (
-    <NavigationContainer initialState={initialState} ref={ref}>
+    <NavigationContainer initialState={initialState} ref={ref}
+    onReady={() => routeNameRef.current = ref.current.getCurrentRoute().name}
+    onStateChange={() => {
+      const previousRouteName = routeNameRef.current;
+      const currentRouteName = ref.current.getCurrentRoute().name
+
+      if (previousRouteName !== currentRouteName) {
+        // The line below uses the expo-firebase-analytics tracker
+        // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
+        // Change this line to use another Mobile analytics SDK
+        Analytics.setCurrentScreen(currentRouteName);
+      }
+
+      // Save the current route name for later comparision
+      routeNameRef.current = currentRouteName;
+    }}
+
+    >
       <Stack.Navigator initialRouteName="draw" headerMode="none">
         {/* 로그인 스크린 */}
         <Stack.Screen name='login' component={LoginScreen} />

@@ -51,7 +51,11 @@ export default function DetailView({ route, navigation }) {
         }
     }, [route.params.webtoon.ix, navigation])
 
-
+    async () => {
+        await Analytics.logEvent('webtoonIx', {
+        webtoonnum: route.params.webtoon.ix
+      });
+    }
     // // 웹툰 프로필에서 픽 처리
     // const PickWebtoon = () => {
     //     showPageLoader(true)

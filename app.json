@@ -32,13 +32,31 @@
       "supportsTablet": true,
       "icon": "./assets/icon.png",
       "usesAppleSignIn": true,
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "config" : {
+        "usesNonExemptEncryption" : false
+      }
     },
     "android": {
       "package": "com.cock.picktoon",
-      "versionCode": 4,
+      "versionCode": 5,
       "googleServicesFile": "./google-services.json",
-      "permissions": []
+      "permissions": [],
+      "useNextNotificationsApi": true      
+    },
+    "web" : {
+      "config" : {
+        "firebase" : {
+          "apiKey": "AIzaSyDYIy5a-mwAe72nKTkfHMnLTEoTXQmW-g4",
+          "authDomain": "picktoon-app.firebaseapp.com",
+          "databaseURL": "https://picktoon-app.firebaseio.com",
+          "projectId": "picktoon-app",
+          "storageBucket": "picktoon-app.appspot.com",
+          "messagingSenderId": "444249620673",
+          "appId": "1:444249620673:web:ca98afde85f89123711440",
+          "measurementId": "G-WPVP5CVJXP"          
+        }
+      }
     }
   }
 }

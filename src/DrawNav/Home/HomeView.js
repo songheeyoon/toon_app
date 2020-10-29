@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, ScrollView, Platform, Alert, BackHandler, RefreshControl, Image, AsyncStorage, Linking } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Platform, Alert, BackHandler, RefreshControl, Image, AsyncStorage, Linking, AppState } from 'react-native';
 import { Header } from 'react-native-elements';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { UIActivityIndicator, MaterialIndicator } from "react-native-indicators";
@@ -12,12 +12,15 @@ import HomeModal from './HomeModal';
 import RestAPI from '../../Utils/RestAPI';
 import HeaderRight from '../Components/HeaderRight';
 
-import { Notifications } from 'expo'
+// import { Notifications } from 'expo'
 import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
 import * as Application from 'expo-application';
 import * as Network from 'expo-network';
 import SliderOneRow from './SliderOneRow';
+
+import * as Notifications from 'expo-notifications';
+// import {Notifications as Notifications2} from 'expo';
 
 let backButtonPressedInMain = false;
 
@@ -27,6 +30,7 @@ export default function HomeView({ navigation, route }) {
     let toastRef = useRef()
     let scrollRef = useRef(null)
     const [homeData, getHomeData] = useState()
+    const [appState, setAppstate] = useState(AppState.currentState);
 
     // 기기의 uuid얻기
     const _getUUID = async () => {
@@ -36,6 +40,7 @@ export default function HomeView({ navigation, route }) {
         } else if (Platform.OS == 'ios') {
             UUID = await Application.getIosIdForVendorAsync()
         }
+
         return UUID
     }
 
@@ -55,6 +60,13 @@ export default function HomeView({ navigation, route }) {
         global.ipAddress = ipAddress
     }
 
+    Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: false,
+          shouldSetBadge: false,
+        }),
+      });
 
     // 기기의 권한 얻기
     const _checkPermission = async () => {
@@ -103,14 +115,14 @@ export default function HomeView({ navigation, route }) {
             }
         }
         if(Platform.OS == 'android') {
-            Notifications.createChannelAndroidAsync('push_message', {
-                name: 'push_message',
-                priority: 'high',
-                sound: true,
-                vibrate: true
-            })
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+              });
         }
-        let token = await Notifications.getExpoPushTokenAsync();
+        let token = (await Notifications.getExpoPushTokenAsync()).data;
         return token;
     }
 
@@ -175,6 +187,129 @@ export default function HomeView({ navigation, route }) {
             showPageLoader(false)
         })
     }
+// 웹툰 상세정보 얻기
+const LoadWebtoonDetail = (webtoonIx) => {
+    RestAPI.getWebtoonDetail(getCurUserIx(), webtoonIx).then(res => {
+        if (res.success == 1) {
+            console.log(res.data[0],"res값");
+            
+            navigation.navigate('detailView', { webtoon : res.data[0], selTabIndex: '1' });
+
+        } else {
+            Alert.alert('적재 오류', '잠시 후 다시 시도하십시오.', [{ text: '확인' }])
+        }
+    }).catch(err => {
+        Alert.alert('로딩 오류', '문제가 발생했습니다. 잠시 후 다시 시도하십시오.', [{ text: '확인' }])
+    }).finally(() => { })
+}
+// 공지사항 정보 얻기 
+const getFaqList = (noticeIx) => {
+    showPageLoader(true)
+    RestAPI.getBoard().then(res => {
+
+       res.map((item,idx)=>{
+            if(item.ix == noticeIx){
+                navigation.navigate('clientCenterBoardDetail', { data : item },);
+            }
+       })
+    }).catch(err => {
+        Alert.alert('로딩 오류', '문제가 발생했습니다. 잠시 후 다시 시도하십시오.', [{ text: '확인' }])
+    }).finally(() => {
+        showPageLoader(false)
+    })
+}
+    useEffect(()=>{
+        const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log(response,"알림값");
+            const url = response.notification.request.content.data.body.title;
+            const ix = response.notification.request.content.data.body.body;
+            if(url == 'picktoon:///draw/detailView'){
+                LoadWebtoonDetail(ix);
+            }else if(url == 'picktoon:///draw/clientCenterBoardDetail'){
+                getFaqList(ix);
+            }else{
+                navigation.navigate(url);                
+            }
+            // console.log(url,"url");
+            // Linking.openURL(url);
+          });
+          return () => subscription.remove();
+    },[navigation])
+
+    // useEffect(()=>{
+    //     AppState.addEventListener('change',handleChange);
+    //     return () => {
+    //      AppState.removeEventListener('change',handleChange);
+    //     }
+    //   })
+   
+    //   const handleChange = nextAppState => {
+    //      setAppstate(appState => nextAppState);
+    //      if(nextAppState === null){
+    //         console.log("app is in background mode");
+    //         Notifications2.addListener((response) => {
+         
+    //          console.log(response,"background");
+    //          const url = response.data.title;
+    //          const ix = response.data.body;
+    //          if(url == 'picktoon:///draw/detailView'){
+    //              LoadWebtoonDetail(ix);
+    //          }else if(url == 'picktoon:///draw/clientCenterBoardDetail'){
+    //              getFaqList(ix);
+    //          }else{
+    //              navigation.navigate(url);                
+    //          }
+    //         });
+    //       }
+    //      if(nextAppState === 'background'){
+    //        console.log("app is in background mode");
+    //        Notifications2.addListener((response) => {
+        
+    //         console.log(response,"background");
+    //         const url = response.data.title;
+    //         const ix = response.data.body;
+    //         if(url == 'picktoon:///draw/detailView'){
+    //             LoadWebtoonDetail(ix);
+    //         }else if(url == 'picktoon:///draw/clientCenterBoardDetail'){
+    //             getFaqList(ix);
+    //         }else{
+    //             navigation.navigate(url);                
+    //         }
+    //        });
+    //      }
+    //      if(nextAppState === 'active'){
+    //        console.log("app is in active foreground mode");
+    //        Notifications2.addListener((response) => {
+        
+    //         console.log(response,"background");
+    //         const url = response.data.title;
+    //         const ix = response.data.body;
+    //         if(url == 'picktoon:///draw/detailView'){
+    //             LoadWebtoonDetail(ix);
+    //         }else if(url == 'picktoon:///draw/clientCenterBoardDetail'){
+    //             getFaqList(ix);
+    //         }else{
+    //             navigation.navigate(url);                
+    //         }
+    //        });
+    //      }
+    //      if(nextAppState === 'inactive'){
+    //        console.log("app is in inactive mode")
+    //        Notifications2.addListener((response) => {
+    //         console.log(response,"inactive");
+    //         const url = response.data.title;
+    //         const ix = response.data.body;
+    //         if(url == 'picktoon:///draw/detailView'){
+    //             LoadWebtoonDetail(ix);
+    //         }else if(url == 'picktoon:///draw/clientCenterBoardDetail'){
+    //             getFaqList(ix);
+    //         }else{
+    //             navigation.navigate(url);                
+    //         }
+    //        });        
+    //      }
+   
+    //   }
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -187,7 +322,7 @@ export default function HomeView({ navigation, route }) {
                     marginTop: Platform.OS == 'ios' ? 0 : -15,
                 }}
             />
-            <View style={isIPhoneX() ? styles.containerIOS : styles.container}>
+            <View style={isIPhoneX() ? styles.containerX : Platform.OS == 'ios' ? styles.containerIOS : styles.container}>
                 <ScrollView
                     ref={scrollRef}
                     refreshControl={
@@ -249,12 +384,17 @@ export default function HomeView({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+    containerIOS: {
+        height: Constants.WINDOW_HEIGHT - 130 - topPadding(),
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
     container: {
         height: Constants.WINDOW_HEIGHT - 100 - topPadding(),
         alignItems: 'center',
         justifyContent: 'flex-start',
     },
-    containerIOS: {
+    containerX: {
         height: Constants.WINDOW_HEIGHT - 160 - topPadding(),
         alignItems: 'center',
         justifyContent: 'flex-start',
