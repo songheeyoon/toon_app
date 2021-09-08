@@ -1,2 +1,2 @@
-# picktoon app
-# reactnative / expo eject
+# toon app
+reactnative / expo eject
