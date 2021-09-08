@@ -12,7 +12,7 @@ export default function NaverLogin({ navigation }) {
     // const [userData, setUserData] = useState()
 
     async function handlePressAsync() {
-        let redirectUrl = AuthSession.getRedirectUrl()
+        let redirectUrl = 'https://auth.expo.io/@toonlab/picktoon_expo';
         const result = await AuthSession.startAsync({
             authUrl: 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=' + Constants.NaverClientID + '&redirect_uri=' + encodeURIComponent(redirectUrl)
         })

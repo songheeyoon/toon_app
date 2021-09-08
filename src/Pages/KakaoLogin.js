@@ -13,14 +13,17 @@ export default function KakaoLogin({ navigation }) {
 
 
     async function handlePressAsync() {
-        let redirectUrl = AuthSession.getRedirectUrl()
+        let redirectUrl = 'https://auth.expo.io/@toonlab/picktoon_expo'
+
+        console.log(encodeURIComponent(redirectUrl),"값")
         const result = await AuthSession.startAsync({
             authUrl: 'https://kauth.kakao.com/oauth/authorize?client_id=' + Constants.restApiKey + '&redirect_uri=' + encodeURIComponent(redirectUrl) + '&response_type=code'
+            ,returnUrl: "picktoon://--/expo-auth-session"
         })
-        // console.log("this is : ", result.params.code)
+        console.log("this is : ", result)
         // setCode(result.params.code)
 
-        handleGetAccess(redirectUrl, result.params.code)
+        // handleGetAccess(redirectUrl, result.params.code)
     }
 
     async function handleGetAccess(redirectUrl, code) {

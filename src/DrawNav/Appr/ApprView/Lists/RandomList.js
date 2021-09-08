@@ -7,9 +7,9 @@ import '@expo/vector-icons';
 import Constants, { getCurUserIx, zeroArray, isIPhoneX } from '../../../../Utils/Constant';
 import RestAPI from '../../../../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
-
+import FastImage from 'react-native-fast-image';
 export const StarList = ({ item, index, onLoadWebtoonDetail, onGiveStarCount, onCountAppr, navigation }) => {
-
+    const [loading,setLoading] = useState(false);
     let webtoon = item;
     const [stars, setStars] = useState(item.rate);
 
@@ -25,11 +25,15 @@ export const StarList = ({ item, index, onLoadWebtoonDetail, onGiveStarCount, on
                 }
             }}
         >
-            <Image
+        <View style={global.deviceType == '1' ? styles.webtoonItemImage : styles.webtoonItemImageTablet}>
+        <FastImage source={{uri: webtoon.image_link}} style={global.deviceType == '1' ? styles.webtoonItemImage : styles.webtoonItemImageTablet} resizeMode={FastImage.resizeMode.cover} onLoadStart={()=>{setLoading(true)}} onLoadEnd={()=>{setLoading(false)}}/>
+        <ActivityIndicator animating={loading} style={global.deviceType == '1' ? styles.webtoonItemImage : styles.webtoonItemImageTablet}/>
+        </View>
+            {/* <Image
                 source={{ uri: webtoon.image_link , cache: 'force-cache'}}
                 style={global.deviceType == '1' ? styles.webtoonItemImage : styles.webtoonItemImageTablet}
                 PlaceholderContent={<ActivityIndicator />}
-            />
+            /> */}
         </TouchableOpacity>
 
         <View style={styles.webtoonItemText}>

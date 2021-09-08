@@ -4,8 +4,8 @@ import { Image } from 'react-native-elements';
 import Constants, { getCurUserIx } from '../../Utils/Constant';
 import RestAPI from '../../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
-import * as Analytics from 'expo-firebase-analytics';
-// import FastImage from 'react-native-fast-image';
+import FastImage from 'react-native-fast-image';
+
 const img = [
         { "url":require('../../../assets/images/1.png')}, {"url":require('../../../assets/images/2.png')},{"url":require('../../../assets/images/3.png')},
         { "url":require('../../../assets/images/4.png')}, {"url":require('../../../assets/images/5.png')},{"url":require('../../../assets/images/6.png')},
@@ -15,6 +15,8 @@ const img = [
 // 홈페이지 부분의 이미지 아이템
 const ImageItem = ({ image, title, onPress, type, num }) => {
 
+    const [loading,setLoading] = useState(false);
+
     return <TouchableOpacity
         style={{ paddingLeft: 5, paddingRight:5, alignItems:"center"}}
         onPress={() => { if (onPress) { onPress(image, title) } }}>
@@ -23,7 +25,8 @@ const ImageItem = ({ image, title, onPress, type, num }) => {
                 type == "A" ?
                 <>
                 <View style={global.deviceType == '1' ? styles.cir : styles.cirTablet} >
-                <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image_cir : styles.image_cirTablet} PlaceholderContent={<ActivityIndicator />} />
+                <FastImage source={{uri: image}} style={global.deviceType == '1' ? styles.image_cir : styles.image_cirTablet} resizeMode={FastImage.resizeMode.cover} onLoadStart={()=>{setLoading(true)}} onLoadEnd={()=>{setLoading(false)}}/>
+                <ActivityIndicator animating={loading} style={global.deviceType == '1' ? styles.cir : styles.cirTablet}/>
                 </View>
                 <View style={{ ...global.deviceType == '1' ? styles.itemName_cir : styles.itemName_cir}}>
                 <Text style={{ ...global.deviceType == '1' ? styles.imageItemTitle_cir : styles.imageItemTitleTablet_cir}}>
@@ -40,7 +43,8 @@ const ImageItem = ({ image, title, onPress, type, num }) => {
                 <View style={{...global.deviceType == '1' ? styles.num_wrap : styles.Tablet_num_wrap}}>
                     <Image source={img[num].url} style={{...global.deviceType == '1' ? styles.num_score : styles.Tablet_num_score}}/>
                     <View style={{marginLeft:2}}>
-                        <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image_num : styles.image_numTablet} PlaceholderContent={<ActivityIndicator />} />
+                        <FastImage source={{ uri: image }} style={global.deviceType == '1' ? styles.image_num : styles.image_numTablet} resizeMode={FastImage.resizeMode.cover} onLoadStart={()=>{setLoading(true)}} onLoadEnd={()=>{setLoading(false)}}/>
+                        <ActivityIndicator animating={loading} style={global.deviceType == '1' ? styles.image_num : styles.image_numTablet}/>
                         <View style={{ ...global.deviceType == '1' ? styles.numName : styles.numNameTablet}}>
                         <Text style={{ ...global.deviceType == '1' ? styles.imageItemTitle_num : styles.imageItemTitleTablet}}>
                             {
@@ -54,7 +58,8 @@ const ImageItem = ({ image, title, onPress, type, num }) => {
                 </View>  :
 
                 <View style={[global.deviceType == '1' ? styles.image : styles.imageTablet,{overflow:"hidden"}]}>
-                <Image source={{ uri: image, cache: 'force-cache' }} style={global.deviceType == '1' ? styles.image : styles.imageTablet} PlaceholderContent={<ActivityIndicator />} />
+                <FastImage source={{ uri: image }} style={global.deviceType == '1' ? styles.image : styles.imageTablet} resizeMode={FastImage.resizeMode.cover} onLoadStart={()=>{setLoading(true)}} onLoadEnd={()=>{setLoading(false)}}/>
+                <ActivityIndicator animating={loading} style={global.deviceType == '1' ? styles.image : styles.imageTablet}/>
                 <View style={{ ...global.deviceType == '1' ? styles.itemName : styles.itemNameTablet}}>
                 <Text style={{ ...global.deviceType == '1' ? styles.imageItemTitle : styles.imageItemTitleTablet}}>
                     {

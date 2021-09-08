@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "픽툰-당신의 웹툰취향은?",
+    "name": "picktoon",
     "slug": "picktoon_expo",
     "scheme": "picktoon",
     "platforms": [
@@ -34,7 +34,10 @@
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "config" : {
-        "usesNonExemptEncryption" : false
+        "usesNonExemptEncryption" : false,
+        "googleSignIn" :{
+          "reservedClientId": "com.googleusercontent.apps.444249620673-rn2msm9rd1qcusn8ikv674q8qtod4t77"
+        }
       }
     },
     "android": {
@@ -42,7 +45,12 @@
       "versionCode": 5,
       "googleServicesFile": "./google-services.json",
       "permissions": [],
-      "useNextNotificationsApi": true      
+      "useNextNotificationsApi": true,
+      "config" : {
+        "googleSignIn" : {
+          "certificateHash" : "4af9198a11d2c2510313bd914f08b10afa8eb4e5"
+        }
+      }     
     },
     "web" : {
       "config" : {

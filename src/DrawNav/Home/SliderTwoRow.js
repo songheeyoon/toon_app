@@ -4,17 +4,18 @@ import { Image } from 'react-native-elements';
 import Constants, { getCurUserIx } from '../../Utils/Constant';
 import RestAPI from '../../Utils/RestAPI';
 import { useFocusEffect } from '@react-navigation/native';
-// import FastImage from 'react-native-fast-image';
+import FastImage from 'react-native-fast-image';
 
 // 홈페이지 부분의 이미지 아이템
 const ImageItem = ({ image, title, onPress, textColor,type }) => {
+    const [loading,setLoading] = useState(false);
 
     return <TouchableOpacity
         style={{ padding: 5 }}
         onPress={() => { if (onPress) { onPress(image, title) } }}>
-            {/* <FastImage source={{uri: image}} style={global.deviceType == '1' ? styles.image : styles.imageTablet} resizeMode={FastImage.resizeMode.contain}/> */}
         <View style={[ type == "C_1" ? (global.deviceType == '1' ? styles.image : styles.imageTablet) :(global.deviceType == '1' ? styles.longimage : styles.longimageTablet),{overflow:"hidden"}]}>
-        <Image source={{ uri: image, cache: 'force-cache' }} style={ type == "C_1" ? (global.deviceType == '1' ? styles.image : styles.imageTablet) :(global.deviceType == '1' ? styles.longimage : styles.longimageTablet) } PlaceholderContent={<ActivityIndicator />} />
+        <FastImage source={{uri: image}} style={ type == "C_1" ? (global.deviceType == '1' ? styles.image : styles.imageTablet) :(global.deviceType == '1' ? styles.longimage : styles.longimageTablet) } resizeMode={FastImage.resizeMode.cover} onLoadStart={()=>{setLoading(true)}} onLoadEnd={()=>{setLoading(false)}}/>
+        <ActivityIndicator animating={loading} style={ type == "C_1" ? (global.deviceType == '1' ? styles.image : styles.imageTablet) :(global.deviceType == '1' ? styles.longimage : styles.longimageTablet) }/>
         <View style={{ ...global.deviceType == '1' ? styles.itemName : styles.itemNameTablet}}>
         <Text style={{ ...global.deviceType == '1' ? styles.imageItemTitle : styles.imageItemTitleTablet}}>
             {
@@ -126,25 +127,21 @@ const styles = StyleSheet.create({
     image: {
         width: Constants.WINDOW_WIDTH * 0.4,
         height: Constants.WINDOW_WIDTH * 0.3,
-        resizeMode: 'cover',
         borderRadius: 5,
     },
     longimage: {
         width: Constants.WINDOW_WIDTH * 0.4,
         height: Constants.WINDOW_WIDTH * 0.6,
-        resizeMode: 'cover',
         borderRadius: 5,
     },
     imageTablet: {
         width: Constants.WINDOW_WIDTH * 0.2,
         height: Constants.WINDOW_WIDTH * 0.15,
-        resizeMode: 'cover',
         borderRadius: 5,        
     },
     longimageTablet: {
         width: Constants.WINDOW_WIDTH * 0.2,
         height: Constants.WINDOW_WIDTH * 0.3,
-        resizeMode: 'cover',
         borderRadius: 5,               
     },
     itemName : {

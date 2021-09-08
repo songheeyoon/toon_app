@@ -25,7 +25,7 @@ export default class LoginScreen extends Component {
     // 구글 로그인
     initAsync = async () => {
         await GoogleSignIn.initAsync({
-            clientId: '444249620673-pea0ut2bbtthaqq32tdef3nqn3uugb6f.apps.googleusercontent.com',
+            clientId: '444249620673-rn2msm9rd1qcusn8ikv674q8qtod4t77.apps.googleusercontent.com',
         });
         this._syncUserWithStateAsync();
     };

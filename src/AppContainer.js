@@ -8,7 +8,7 @@ import LoginScreen from './Pages/LoginScreen';
 import SignupScreen from './Pages/SignupScreen';
 import SignupInputScreen from './Pages/SignupInputScreen';
 import SignupAgreeScreen from './Pages/SignupAgreeScreen';
-import * as Linking from 'expo-linking';
+
 // import { Notifications } from 'expo';
 
 const Stack = createStackNavigator()
@@ -17,12 +17,11 @@ export default function AppContainer() {
   const ref = useRef();
   const routeNameRef = useRef();
 
-  const prefix = Linking.makeUrl('/');
   const [isReady, setIsReady] = useState(false);
   const [initialState, setInitialState] = useState();
 
     const {getInitialState} = useLinking(ref,{
-        prefixes: [prefix],
+        prefixes: 'picktoon://',
         config:{
           screen:{
             draw:{

@@ -315,11 +315,11 @@ const getFaqList = (noticeIx) => {
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <Header
                 rightComponent={<HeaderRight navigation={navigation} />}
-                backgroundColor="#FFF"
+                backgroundColor="#fff"
                 containerStyle={{
                     height: Constants.HeaderHeight,
                     alignItems: Platform.OS == 'ios' ? 'center' : 'flex-start',
-                    marginTop: Platform.OS == 'ios' ? 0 : -15,
+                    marginTop: Platform.OS == 'ios' ? 0 : 15,
                 }}
             />
             <View style={isIPhoneX() ? styles.containerX : Platform.OS == 'ios' ? styles.containerIOS : styles.container}>

@@ -308,17 +308,18 @@ export default function DetailView({ route, navigation }) {
                 containerStyle={{
                     height: Constants.HeaderHeight,
                     alignItems: Platform.OS == 'ios' ? 'center' : 'flex-start',
-                    marginTop: Platform.OS == 'ios' ? 0 : -15,
+                    marginTop: Platform.OS == 'ios' ? 0 : 15,
                 }}
             />
             <KeyboardAvoidingView
                 // behavior={Platform.OS == "ios" ? "padding" : "height"}
-                style={{ flex: 1, marginBottom: isIPhoneX ? 20 : 0 }}
+                style={{ flex: 1, marginBottom: isIPhoneX ? 0 : 0 }}
                 enabled>
                 <View style={{
                     flex: 2,
                     height: Constants.WINDOW_HEIGHT - topPadding(),
-                    marginBottom: 40
+                    marginBottom: 40,
+
                 }}>
 
 

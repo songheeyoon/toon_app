@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "444249620673-m67no4jiuugejv909nekgp7iq46rfecb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cock.picktoon",
+            "certificate_hash": "4af9198a11d2c2510313bd914f08b10afa8eb4e5"
+          }
+        },
+        {
           "client_id": "444249620673-pea0ut2bbtthaqq32tdef3nqn3uugb6f.apps.googleusercontent.com",
           "client_type": 3
         }
