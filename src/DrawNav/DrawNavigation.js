@@ -287,6 +287,7 @@ export const CustomDrawerContent = (props) => {
 }
 
 export default function DrawNavigation({ navigation }) {
+    // 사이드바가 깜박이는거 방지.
     const [initRender, setInitRender] = useState(true)
 
     useEffect(() => {
